@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#96BEAA"
+    tools:context=".MainActivity">
+
+    <!-- Guideline para posicionamiento proporcional -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <!-- Logo centrado arriba -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/club_deportivo"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Contenedor principal -->
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_container"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.85">
+
+        <!-- Label con ícono de sobre -->
+        <TextView
+            android:id="@+id/lblCorreo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Correo"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:drawableLeft="@drawable/ic_sobre"
+            android:drawablePadding="8dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <!-- Campo usuario -->
+        <EditText
+            android:id="@+id/txtUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/border"
+            android:text=""
+            android:textSize="20sp"
+            android:layout_marginTop="12dp"
+            android:inputType="textEmailAddress"
+            android:hint=" ejemplo@correo.com"
+            android:textColorHint="@color/white"/>
+
+        <!-- Label contraseña -->
+        <TextView
+            android:id="@+id/lblPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contraseña"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:drawableLeft="@drawable/ic_password"
+            android:drawablePadding="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <!-- Campo contraseña -->
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/border"
+            android:text=""
+            android:textSize="20sp"
+            android:layout_marginTop="12dp"
+            android:inputType="textPassword"
+            android:hint=" Contraseña"
+            android:textColorHint="@color/white"/>/>
+
+        <!-- Botón ingresar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnIngresar"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:minWidth="100dp"
+            android:text="@string/btnIngresar"
+            android:textSize="18sp"
+            app:cornerRadius="30dp"
+            app:strokeColor="#D7E3DD"
+            app:strokeWidth="2dp"
+            app:backgroundTint="#16613C"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="32dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
