@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UsoVariasPantallas">
         <activity
+            android:name=".OtrasOperaciones"
+            android:exported="false" />
+        <activity
+            android:name=".OtrasOperacionesActivity"
+            android:exported="false" />
+        <activity
             android:name=".MenuPrincipal"
             android:exported="false" />
         <activity

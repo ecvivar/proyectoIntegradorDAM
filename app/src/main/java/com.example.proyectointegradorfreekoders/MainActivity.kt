@@ -12,9 +12,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
         val btnIngresar = findViewById<Button>(R.id.btnIngresar)
         val txtUsuario = findViewById<TextView>(R.id.txtUsuario)
         val txtPassword = findViewById<TextView>(R.id.txtPassword)
+
         btnIngresar.setOnClickListener {
             val intent = Intent(this, MenuPrincipal::class.java)
             startActivity(intent)
