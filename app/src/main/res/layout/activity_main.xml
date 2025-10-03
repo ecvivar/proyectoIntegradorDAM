@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/inicio"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#96BEAA"
@@ -19,12 +19,12 @@
 
     <!-- Logo centrado arriba -->
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/logoClubDeportivo"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:src="@drawable/club_deportivo"
         app:layout_constraintTop_toTopOf="@id/guidelineTop"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -36,7 +36,7 @@
         android:background="@drawable/border_container"
         android:orientation="vertical"
         android:padding="24dp"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/logoClubDeportivo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

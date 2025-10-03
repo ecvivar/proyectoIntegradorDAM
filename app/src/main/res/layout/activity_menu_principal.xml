@@ -1,24 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/inicio"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#96BEAA"
-    tools:context=".menuPrincipal">
+    tools:context=".MenuPrincipal">
 
-    <ImageView
-        android:id="@+id/imageView2"
+    <!-- Guideline para posicionamiento proporcional -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="492dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <!-- Logo centrado arriba -->
+    <ImageView
+        android:id="@+id/logoClubDeportivo"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/club_deportivo"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/club_deportivo" />
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Contenedor principal -->
+    <LinearLayout
+        android:id="@+id/containerInicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/logoClubDeportivo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Fila con Bienvenida y Menú -->
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/border_inicio">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¡BIENVENIDO, ADMIN!"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="20dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_menu"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="60dp">
+
+            <!-- Botón Registrar Socio -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRegistrarSocio"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_weight="0.6"
+                android:text="Registrar Socio"
+                android:textSize="18sp"
+                app:cornerRadius="30dp"
+                app:backgroundTint="#16613C"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Botón Registrar No Socio -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRegistrarNoSocio"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Registrar No Socio"
+                android:textSize="18sp"
+                app:cornerRadius="30dp"
+                app:backgroundTint="#16613C"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
