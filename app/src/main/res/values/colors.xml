@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="verde_fondo">#96BEAA</color>        <!-- fondo general -->
+    <color name="verde_oscuro">#16613C</color>       <!-- cabecera -->
+    <color name="verde_boton">#2D7A57</color>        <!-- botones -->
 </resources>
