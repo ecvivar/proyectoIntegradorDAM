@@ -5,6 +5,8 @@
 
     <color name="verde_fondo_app">#96BEAA</color>
     <color name="verde_boton_app">#105C37</color>
+    <color name="gris_text">#B1B0B2</color>
+
 
 
     <color name="verde_fondo">#96BEAA</color>        <!-- fondo general -->

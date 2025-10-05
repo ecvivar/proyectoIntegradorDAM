@@ -60,12 +60,14 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@drawable/border"
+            android:paddingStart="16dp"
             android:text=""
             android:textSize="20sp"
+            android:textColor="@color/white"
             android:layout_marginTop="12dp"
             android:inputType="textEmailAddress"
             android:hint=" ejemplo@correo.com"
-            android:textColorHint="@color/white"/>
+            android:textColorHint="@color/gris_text"/>
 
         <!-- Label contraseña -->
         <TextView
@@ -86,12 +88,14 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@drawable/border"
+            android:paddingStart="16dp"
             android:text=""
             android:textSize="20sp"
+            android:textColor="@color/white"
             android:layout_marginTop="12dp"
             android:inputType="textPassword"
             android:hint=" Contraseña"
-            android:textColorHint="@color/white"/>/>
+            android:textColorHint="@color/gris_text"/>/>
 
         <!-- Botón ingresar -->
         <com.google.android.material.button.MaterialButton
