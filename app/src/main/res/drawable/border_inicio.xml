@@ -4,7 +4,7 @@
     <solid android:color="#16613C"/> <!-- Color de fondo del TextView -->
     <stroke
         android:width="2dp"
-        android:color="#D7E3DD"/> <!-- Color del borde (ejemplo: rojo) -->
+        android:color="#16613C"/> <!-- Color del borde (ejemplo: rojo) -->
     <corners
         android:topLeftRadius="30dp"
         android:bottomRightRadius="30dp"/> <!-- Radio para bordes redondeados -->

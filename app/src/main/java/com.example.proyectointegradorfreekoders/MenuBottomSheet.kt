@@ -34,8 +34,10 @@ class MenuBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        view.findViewById<Button>(R.id.btnImprimirCarnet).setOnClickListener {
-            Toast.makeText(requireContext(), "Imprimir carnet de socio", Toast.LENGTH_SHORT).show()
+        val btnImprimirCarnet: Button = view.findViewById(R.id.btnImprimirCarnet)
+        btnImprimirCarnet.setOnClickListener {
+            val intent = Intent(requireContext(), ImprimirCarnetSocio::class.java)
+            startActivity(intent)
             dismiss()
         }
 
