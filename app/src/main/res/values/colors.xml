@@ -2,13 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-<<<<<<< HEAD
+
     <color name="verde_fondo_app">#96BEAA</color>
     <color name="verde_boton_app">#105C37</color>
 
-=======
+
     <color name="verde_fondo">#96BEAA</color>        <!-- fondo general -->
     <color name="verde_oscuro">#16613C</color>       <!-- cabecera -->
     <color name="verde_boton">#2D7A57</color>        <!-- botones -->
->>>>>>> dab7f21dc70037aed5f423eac5ad45a38f8d72ae
+
 </resources>

@@ -5,15 +5,11 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-<<<<<<< HEAD
-import android.widget.ImageView
-import android.content.Intent
 import com.google.android.material.button.MaterialButton
-=======
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 
->>>>>>> dab7f21dc70037aed5f423eac5ad45a38f8d72ae
+
 
 class MenuPrincipal : AppCompatActivity() {
 
