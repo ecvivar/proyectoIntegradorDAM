@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ImageView
 import android.content.Intent
+import com.google.android.material.button.MaterialButton
 
 class MenuPrincipal : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +17,22 @@ class MenuPrincipal : AppCompatActivity() {
 
         btnMenu.setOnClickListener {
             val intent = Intent(this, OtrasOperaciones::class.java)
+            startActivity(intent)
+        }
+
+        // Botón Registrar Socio
+        val botonRegistrarSocio = findViewById<MaterialButton>(R.id.btnRegistrarSocio)
+
+        botonRegistrarSocio.setOnClickListener {
+            val intent = Intent(this, RegistrarSocioActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Botón Registrar No Socio
+        val botonRegistrarNoSocio = findViewById<MaterialButton>(R.id.btnRegistrarNoSocio)
+
+        botonRegistrarNoSocio.setOnClickListener {
+            val intent = Intent(this, RegistrarNoSocioActivity::class.java)
             startActivity(intent)
         }
 

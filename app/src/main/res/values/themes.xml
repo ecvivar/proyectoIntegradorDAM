@@ -6,4 +6,40 @@
     </style>
 
     <style name="Theme.UsoVariasPantallas" parent="Base.Theme.UsoVariasPantallas" />
+
+    <!-- Estilo para el botón superior verde con esquinas personalizadas -->
+    <style name="ShapeAppearance.App.Button.EsquinasPersonalizadas" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">30dp</item>
+        <item name="cornerSizeBottomRight">30dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <!-- Estilo para la forma de los campos de texto del formulario -->
+    <style name="ShapeAppearance.App.FormInput" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">30dp</item>
+        <item name="cornerSizeBottomRight">30dp</item>
+    </style>
+
+    <!-- Estilo para texto del label -->
+    <style name="EstiloLabelFormulario" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- Plantilla para los campos de texto normales del formulario -->
+    <style name="Widget.App.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="hintTextAppearance">@style/EstiloLabelFormulario</item>
+    </style>
+
+    <!-- Plantilla para los menús desplegables del formulario -->
+    <style name="Widget.App.TextInputLayout.ExposedDropdown" parent="Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu">
+        <item name="hintTextAppearance">@style/EstiloLabelFormulario</item>
+    </style>
+
+
+
 </resources>

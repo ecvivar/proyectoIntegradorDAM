@@ -12,10 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UsoVariasPantallas">
         <activity
-            android:name=".OtrasOperaciones"
+            android:name=".RegistrarSocioActivity"
             android:exported="false" />
         <activity
-            android:name=".OtrasOperacionesActivity"
+            android:name=".RegistrarNoSocioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OtrasOperaciones"
             android:exported="false" />
         <activity
             android:name=".MenuPrincipal"
