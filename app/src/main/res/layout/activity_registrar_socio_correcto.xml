@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#96BEAA"
+    tools:context=".RegistrarSocioCorrectoActivity">
+
+    <!-- Logo en la parte superior -->
+    <ImageView
+        android:id="@+id/logoClubDeportivo"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/club_deportivo"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Contenedor verde oscuro con bordes redondeados -->
+    <LinearLayout
+        android:id="@+id/contenedorVerde"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingTop="40dp"
+        android:paddingBottom="40dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:background="@drawable/contenedor_verde_redondeado"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toBottomOf="@id/logoClubDeportivo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Icono decorativo del check redondo -->
+        <ImageView
+            android:id="@+id/iconoCheck"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/check"
+            app:tint="@color/white"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Texto de confirmación -->
+        <TextView
+            android:id="@+id/textoConfirmacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SOCIO REGISTRADO CORRECTAMENTE"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_marginBottom="40dp"/>
+
+        <!-- Botón para volver al inicio -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVolverInicio"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="INICIO"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:backgroundTint="#4E8C67"
+            app:cornerRadius="20dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

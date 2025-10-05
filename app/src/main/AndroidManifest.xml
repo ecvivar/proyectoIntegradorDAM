@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UsoVariasPantallas">
         <activity
+            android:name=".RegistrarNoSocioCorrectoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegistrarSocioCorrectoActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegistrarSocioActivity"
             android:exported="false" />
         <activity

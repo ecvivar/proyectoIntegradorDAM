@@ -1,5 +1,6 @@
 package com.example.proyectointegradorfreekoders
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,16 @@ class RegistrarSocioActivity : AppCompatActivity() {
         val botonVolver = findViewById<MaterialButton>(R.id.btnRegistrarSocio)
         botonVolver.setOnClickListener {
             finish()
+        }
+
+        val btnFinal = findViewById<MaterialButton>(R.id.btnRegistrarSocioFinal)
+
+        btnFinal.setOnClickListener {
+            // Lógica para guardar los datos del socio en la base de datos...
+            // y una vez que la lógica es exitosa:
+            // Navegamos a la pantalla de confirmación
+            val intent = Intent(this, RegistrarSocioCorrectoActivity::class.java)
+            startActivity(intent)
         }
     }
 }

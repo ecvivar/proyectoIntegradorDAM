@@ -199,7 +199,7 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegistrarSocioFinal">
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistrarNoSocioFinal">
 
         <!-- Checkbox para el apto físico -->
         <CheckBox
@@ -216,7 +216,7 @@
     <!-- Botón final para registrar al socio -->
     <!-- Se posiciona en la parte inferior de la pantalla -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnRegistrarSocioFinal"
+        android:id="@+id/btnRegistrarNoSocioFinal"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="36dp"
