@@ -10,7 +10,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 
 
-
 class MenuPrincipal : AppCompatActivity() {
 
     private lateinit var btnMenu: ImageView
@@ -42,6 +41,13 @@ class MenuPrincipal : AppCompatActivity() {
             val intent = Intent(this, RegistrarNoSocioActivity::class.java)
             startActivity(intent)
         }
+
+//        val botonListaDePagos = findViewById<MaterialButton>(R.id.btnListaPagos)
+//        botonListaDePagos.setOnClickListener {
+//            val intent = Intent(this, ListaDePagoInicioActivity::class.java)
+//            startActivity(intent)
+//
+//        }
 
     }
 }

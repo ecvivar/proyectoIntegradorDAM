@@ -12,6 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UsoVariasPantallas">
         <activity
+            android:name=".FormularioPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListaDePagoInicioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListaDePagoNoSocioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListaDePagoSocioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListarVencimientosActivity"
+            android:exported="false" />
+        <activity
             android:name=".PagoCorrectoActivity"
             android:exported="false" />
         <activity
@@ -26,9 +41,9 @@
         <activity
             android:name=".RegistrarNoSocioActivity"
             android:exported="false" />
-        <activity
-            android:name=".OtrasOperaciones"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".OtrasOperaciones"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".MenuPrincipal"
             android:exported="false" />

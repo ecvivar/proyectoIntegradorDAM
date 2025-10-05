@@ -1,5 +1,6 @@
 package com.example.proyectointegradorfreekoders
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.button.MaterialButton
 
 class MenuBottomSheet : BottomSheetDialogFragment() {
 
@@ -15,16 +17,20 @@ class MenuBottomSheet : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.bottom_menu, container, false)
 
-        // Ejemplo de acciones
-        view.findViewById<Button>(R.id.btnListaPagos).setOnClickListener {
-            Toast.makeText(requireContext(), "Abrir lista de pagos", Toast.LENGTH_SHORT).show()
+        val botonListaDePagos = view.findViewById<MaterialButton>(R.id.btnListaPagos)
+        botonListaDePagos.setOnClickListener {
+            val intent = Intent(requireContext(), ListaDePagoInicioActivity::class.java)
+            startActivity(intent)
             dismiss()
         }
 
-        view.findViewById<Button>(R.id.btnVencimientosDia).setOnClickListener {
-            Toast.makeText(requireContext(), "Listar vencimientos del día", Toast.LENGTH_SHORT).show()
+        val botonVencimientos = view.findViewById<MaterialButton>(R.id.btnVencimientosDia)
+        botonVencimientos.setOnClickListener {
+            val intent = Intent(requireContext(), ListarVencimientosActivity::class.java)
+            startActivity(intent)
             dismiss()
         }
 
