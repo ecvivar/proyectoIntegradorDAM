@@ -34,13 +34,15 @@ class MenuBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        view.findViewById<Button>(R.id.btnImprimirCarnet).setOnClickListener {
-            Toast.makeText(requireContext(), "Imprimir carnet de socio", Toast.LENGTH_SHORT).show()
+        val botonAsignarActividadNoSocio = view.findViewById<MaterialButton>(R.id.btnAsignarActividad)
+        botonAsignarActividadNoSocio.setOnClickListener {
+            val intent = Intent(requireContext(), AsignarActividadNoSocioActivity::class.java)
+            startActivity(intent)
             dismiss()
         }
 
-        view.findViewById<Button>(R.id.btnAsignarActividad).setOnClickListener {
-            Toast.makeText(requireContext(), "Asignar actividad (No Socio)", Toast.LENGTH_SHORT).show()
+        view.findViewById<Button>(R.id.btnImprimirCarnet).setOnClickListener {
+            Toast.makeText(requireContext(), "Imprimir carnet de socio", Toast.LENGTH_SHORT).show()
             dismiss()
         }
 
