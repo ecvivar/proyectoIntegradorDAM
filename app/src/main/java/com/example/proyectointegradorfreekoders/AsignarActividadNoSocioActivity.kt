@@ -78,7 +78,7 @@ class AsignarActividadNoSocioActivity : AppCompatActivity() {
                 Toast.makeText(this, "Seleccioná al menos un horario", Toast.LENGTH_SHORT).show()
             } else {
                 // Si hay horarios, se prepara el intent para la siguiente pantalla.
-                val intent = Intent(this, RegistrarSocioCorrectoActivity::class.java).apply {
+                val intent = Intent(this, AsignarActividadNoSocio2::class.java).apply {
                     putStringArrayListExtra("horarios", ArrayList(horariosSeleccionados))
                 }
                 startActivity(intent)
