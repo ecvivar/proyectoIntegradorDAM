@@ -162,7 +162,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_pagar"
             android:layout_width="100dp"
             android:layout_height="wrap_content"

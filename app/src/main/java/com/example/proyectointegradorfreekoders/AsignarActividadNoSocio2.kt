@@ -1,6 +1,5 @@
 package com.example.proyectointegradorfreekoders
 
-import android.R.*
 import android.os.Bundle
 import android.content.Intent
 import android.widget.ImageView
@@ -17,10 +16,10 @@ class AsignarActividadNoSocio2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asignar_actividad_no_socio2)
 
-//        val botonAtras = findViewById<MaterialButton>(R.id.btnAtras)
-//        botonAtras.setOnClickListener {
-//            finish()
-//        }
+        val botonAtras = findViewById<ImageView>(R.id.btnAtras)
+        botonAtras.setOnClickListener {
+            finish()
+        }
 
         val botonSiguiente = findViewById<MaterialButton>(R.id.btnSiguiente)
         botonSiguiente.setOnClickListener {
