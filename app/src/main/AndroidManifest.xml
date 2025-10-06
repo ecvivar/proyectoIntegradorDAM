@@ -15,6 +15,9 @@
             android:name=".AsignarActividadNoSocioActivity"
             android:exported="false" />
         <activity
+            android:name=".ImprimirCarnetSocio"
+            android:exported="false" />
+        <activity
             android:name=".FormularioPagoActivity"
             android:exported="false" />
         <activity

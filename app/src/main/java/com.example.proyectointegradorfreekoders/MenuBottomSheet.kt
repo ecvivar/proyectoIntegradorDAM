@@ -34,17 +34,22 @@ class MenuBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        val botonAsignarActividadNoSocio = view.findViewById<MaterialButton>(R.id.btnAsignarActividad)
-        botonAsignarActividadNoSocio.setOnClickListener {
-            val intent = Intent(requireContext(), AsignarActividadNoSocioActivity::class.java)
-            startActivity(intent)
-            dismiss()
-        }
 
-        view.findViewById<Button>(R.id.btnImprimirCarnet).setOnClickListener {
-            Toast.makeText(requireContext(), "Imprimir carnet de socio", Toast.LENGTH_SHORT).show()
-            dismiss()
-        }
+        val botonAsignarActividadNoSocio =
+            view.findViewById<MaterialButton>(R.id.btnAsignarActividad)
+            botonAsignarActividadNoSocio.setOnClickListener {
+            val intent = Intent(requireContext(), AsignarActividadNoSocioActivity::class.java)
+                startActivity(intent)
+                dismiss()
+            }
+
+        val btnImprimirCarnet: Button = view.findViewById(R.id.btnImprimirCarnet)
+            btnImprimirCarnet.setOnClickListener {
+                val intent = Intent(requireContext(), ImprimirCarnetSocio::class.java)
+
+                startActivity(intent)
+                dismiss()
+            }
 
         return view
     }

@@ -10,6 +10,12 @@ class FormularioPagoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulariopago)
 
+        val botonPagar = findViewById<MaterialButton>(R.id.btn_pagar)
+        botonPagar.setOnClickListener {
+            val intent = Intent(this, PagoCorrectoActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
     }
 }

@@ -18,5 +18,7 @@ class PagoCorrectoActivity : AppCompatActivity() {
             finish()
         }
 
+
+
     }
 }

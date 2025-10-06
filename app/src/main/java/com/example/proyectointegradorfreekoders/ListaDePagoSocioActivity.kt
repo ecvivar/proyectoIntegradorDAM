@@ -17,5 +17,13 @@ class ListaDePagoSocioActivity : AppCompatActivity() {
             flechahaciaAtras.setOnClickListener {
             finish()
         }
+
+
+        val botonSiguiente = findViewById<MaterialButton>(R.id.btn_next)
+        botonSiguiente.setOnClickListener {
+            val intent = Intent(this, FormularioPagoActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
