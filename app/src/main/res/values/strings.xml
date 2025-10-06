@@ -1,9 +1,9 @@
 <resources>
-<!--    <string name="app_name">usoVariasPantallas</string>-->
+    <!--    <string name="app_name">usoVariasPantallas</string>-->
     <string name="userName">Usuario</string>
     <string name="userPassword">Contraseña</string>
     <string name="btnIngresar">Iniciar Sesion</string>
-<!--    se usa en AndroidManifiest.xml-->
+    <!--    se usa en AndroidManifiest.xml-->
     <string name="app_name">Freekoders</string>
     <string-array name="cuotas_options">
         <item>1 cuota</item>
