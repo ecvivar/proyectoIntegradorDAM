@@ -9,7 +9,7 @@
     android:padding="16dp"
     tools:context=".ListaDePagoSocioActivity">
 
-    <!-- Logo centrado arriba -->
+    <!-- Logo  -->
     <ImageView
         android:id="@+id/logoClubDeportivo"
         android:layout_width="160dp"
