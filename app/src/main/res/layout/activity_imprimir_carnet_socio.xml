@@ -35,11 +35,7 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintWidth_percent="0.85">
 
-        <!-- ============================================== -->
-        <!--        INICIO: TÍTULO Y FOTO REORDENADOS       -->
-        <!-- ============================================== -->
-
-        <!-- Título del carnet (Ahora está primero) -->
+        <!-- Título del carnet  -->
         <TextView
             android:id="@+id/tvTituloCarnet"
             android:layout_width="wrap_content"
@@ -49,7 +45,7 @@
             android:textSize="20sp"
             android:textColor="@color/white"/>
 
-        <!-- ScrollView que ahora contiene la FOTO y los campos de texto -->
+        <!-- ScrollView  -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -62,14 +58,14 @@
                 android:gravity="center_horizontal"
                 android:paddingBottom="16dp">
 
-                <!-- Foto del socio (Ahora está dentro del ScrollView) -->
+                <!-- Foto del socio -->
                 <ImageView
                     android:id="@+id/imgSocio"
                     android:layout_width="160dp"
                     android:layout_height="160dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerInside"
                     android:src="@drawable/foto_socio" />
 
                 <!-- Campo 1: Nombre -->
@@ -152,9 +148,6 @@
 
             </LinearLayout>
         </ScrollView>
-        <!-- ============================================== -->
-        <!--         FIN: TÍTULO Y FOTO REORDENADOS         -->
-        <!-- ============================================== -->
 
     </LinearLayout>
 
