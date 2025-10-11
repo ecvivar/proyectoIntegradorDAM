@@ -7,15 +7,7 @@
     android:background="@color/verde_fondo"
     android:padding="16dp">
 
-<!--    &lt;!&ndash; Guideline para posicionamiento proporcional &ndash;&gt;-->
-<!--    <androidx.constraintlayout.widget.Guideline-->
-<!--        android:id="@+id/guidelineTop"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        app:layout_constraintGuide_percent="0.1" />-->
-
-        <!-- Logo y título -->
+    <!-- Logo del Club -->
     <ImageView
         android:id="@+id/logoClubDeportivo"
         android:layout_width="160dp"
@@ -30,71 +22,141 @@
     <LinearLayout
         android:id="@+id/contenedorDatos"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:gravity="center_horizontal"
         android:background="@drawable/border_container"
         app:layout_constraintTop_toBottomOf="@id/logoClubDeportivo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.85"
-        app:layout_constraintVertical_bias="0.2">
+        app:layout_constraintBottom_toTopOf="@id/btnImprimir"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintWidth_percent="0.85">
 
-            <!-- Foto del socio -->
-            <ImageView
-                android:id="@+id/imgSocio"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_marginTop="12dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/foto_socio"
-                />
-            <TextView
-                android:id="@+id/tvTituloCarnet"
-                android:layout_width="wrap_content"
+        <!-- ============================================== -->
+        <!--        INICIO: TÍTULO Y FOTO REORDENADOS       -->
+        <!-- ============================================== -->
+
+        <!-- Título del carnet (Ahora está primero) -->
+        <TextView
+            android:id="@+id/tvTituloCarnet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CARNET DE SOCIO"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
+
+        <!-- ScrollView que ahora contiene la FOTO y los campos de texto -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CARNET DE SOCIO"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/white"/>
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingBottom="16dp">
 
-            <!-- Datos del socio -->
-            <TextView
-                android:id="@+id/tvNombre"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginTop="8dp"
-                android:text="Nombre: Julián “Stack” Medina"
-                android:textSize="14sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/border_carnet"/>
+                <!-- Foto del socio (Ahora está dentro del ScrollView) -->
+                <ImageView
+                    android:id="@+id/imgSocio"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/foto_socio" />
 
-            <TextView
-                android:id="@+id/tvDni"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginTop="8dp"
-                android:text="DNI: 43.956.279"
-                android:textSize="14sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/border_carnet"/>
+                <!-- Campo 1: Nombre -->
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="@drawable/border_carnet">
 
-            <TextView
-                android:id="@+id/tvSocio"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginTop="8dp"
-                android:text="N° de Socio: 2354973895169"
-                android:textSize="14sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/border_carnet"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"/>
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvNombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Julián “Stack” Medina"
+                        android:textSize="14sp"
+                        android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- Campo 2: DNI -->
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/border_carnet">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DNI"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"/>
+
+                    <TextView
+                        android:id="@+id/tvDni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="43.956.279"
+                        android:textSize="14sp"
+                        android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- Campo 3: N° de Socio -->
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/border_carnet">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N° de Socio"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvSocio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2354973895169"
+                        android:textSize="14sp"
+                        android:textColor="#555555"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+        <!-- ============================================== -->
+        <!--         FIN: TÍTULO Y FOTO REORDENADOS         -->
+        <!-- ============================================== -->
+
+    </LinearLayout>
 
     <!-- Botón imprimir -->
     <com.google.android.material.button.MaterialButton
@@ -112,5 +174,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        app:layout_goneMarginTop="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
