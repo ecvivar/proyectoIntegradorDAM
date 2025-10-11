@@ -1,121 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/green_fondo"
+    android:background="@color/verde_fondo_app"
     android:padding="16dp">
 
-
+    <!-- Logo centrado arriba -->
     <ImageView
-        android:id="@+id/iv_logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center_horizontal"
-        android:contentDescription="Logo Freekoders"
-        android:src="@drawable/logoclub" />
+        android:id="@+id/logoClubDeportivo"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/club_deportivo"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Botón para volver atrás -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="LISTA DE PAGOS"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:backgroundTint="@color/verde_boton_app"
+        app:shapeAppearance="@style/ShapeAppearance.App.Button.EsquinasPersonalizadas"
+        app:icon="@drawable/arrow_back"
+        app:iconTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logoClubDeportivo" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal"
-        android:background="@color/green_carteles"
-        android:gravity="center_vertical"
-        android:layout_marginTop="16dp"
-        android:paddingHorizontal="12dp"
-        android:layout_marginBottom="24dp"
-        android:clipToOutline="true">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardBackgroundColor="@color/verde_boton_app"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="Volver"
-            android:src="@drawable/arrow" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="LISTA DE PAGOS"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:background="@android:color/transparent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:iconifiedByDefault="false"
+            app:queryHint="Ingrese documento..."/>
 
+    </androidx.cardview.widget.CardView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal"
-        android:background="@color/green_carteles"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="12dp"
-        android:layout_marginBottom="24dp"
-        android:clipToOutline="true">
-
-        <EditText
-            android:id="@+id/et_documento"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Ingrese documento..."
-            android:background="@null"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#DDFFFFFF"
-            android:inputType="text"
-            android:padding="0dp" />
-
-        <ImageView
-            android:id="@+id/iv_search"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="Buscar"
-            android:src="@drawable/search" />
-    </LinearLayout>
-
-
+    <!-- Tarjeta con las opciones de Socio/No Socio -->
     <LinearLayout
         android:id="@+id/card_opciones"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#F0F0F0"
-        android:padding="16dp"
-        android:elevation="4dp"
+        android:layout_marginTop="24dp"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginBottom="16dp">
+        android:background="#F0F0F0"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/searchCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/tv_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="Presiona la opción deseada"
-            android:textSize="14sp"
             android:textColor="#333333"
-            android:layout_marginBottom="16dp" />
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_socio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:text="Socio"
-                android:layout_marginEnd="16dp" />
+                android:textColor="@color/white"
+                app:backgroundTint="@color/verde_boton_app" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_no_socio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No socio" />
+                android:text="No socio"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/verde_boton_app" />
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

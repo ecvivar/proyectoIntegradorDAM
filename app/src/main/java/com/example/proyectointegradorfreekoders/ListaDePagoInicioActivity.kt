@@ -12,8 +12,9 @@ class ListaDePagoInicioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listadepagoinicio)
 
-        val flechaAtras = findViewById<ImageView>(R.id.iv_back)
-        flechaAtras.setOnClickListener {
+
+        val botonVolver = findViewById<MaterialButton>(R.id.btnBack)
+        botonVolver.setOnClickListener {
             finish()
         }
 

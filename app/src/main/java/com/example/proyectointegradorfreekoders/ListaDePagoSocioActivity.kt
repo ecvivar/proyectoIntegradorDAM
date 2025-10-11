@@ -13,13 +13,12 @@ class ListaDePagoSocioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listadepagosocio)
 
-        val flechahaciaAtras = findViewById<ImageView>(R.id.iv_back)
-            flechahaciaAtras.setOnClickListener {
+        val botonVolver = findViewById<MaterialButton>(R.id.btnVolver)
+        botonVolver.setOnClickListener {
             finish()
         }
 
-
-        val botonSiguiente = findViewById<MaterialButton>(R.id.btn_next)
+        val botonSiguiente = findViewById<Button>(R.id.btn_next)
         botonSiguiente.setOnClickListener {
             val intent = Intent(this, FormularioPagoActivity::class.java)
             startActivity(intent)
