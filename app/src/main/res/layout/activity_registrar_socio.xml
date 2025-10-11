@@ -63,12 +63,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="@style/ShapeAppearance.App.FormInput">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    /> </com.google.android.material.textfield.TextInputLayout>
+                app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
+                app:boxCornerRadiusTopStart="0dp"          app:boxCornerRadiusTopEnd="0dp"            app:boxCornerRadiusBottomStart="36dp"      app:boxCornerRadiusBottomEnd="36dp">       <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                /> </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilApellido"
@@ -81,7 +80,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilNombre"
-                app:shapeAppearance="@style/ShapeAppearance.App.FormInput">
+                app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
+                app:boxCornerRadiusTopStart="0dp"
+                app:boxCornerRadiusTopEnd="0dp"
+                app:boxCornerRadiusBottomStart="36dp"
+                app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -99,7 +102,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilApellido"
-                app:shapeAppearance="@style/ShapeAppearance.App.FormInput">
+                app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
+                app:boxCornerRadiusTopStart="0dp"
+                app:boxCornerRadiusTopEnd="0dp"
+                app:boxCornerRadiusBottomStart="36dp"
+                app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -118,7 +125,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilTelefono"
-                app:shapeAppearance="@style/ShapeAppearance.App.FormInput">
+                app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
+                app:boxCornerRadiusTopStart="0dp"
+                app:boxCornerRadiusTopEnd="0dp"
+                app:boxCornerRadiusBottomStart="36dp"
+                app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -136,7 +147,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilDireccion"
-                app:shapeAppearance="@style/ShapeAppearance.App.FormInput">
+                app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
+                app:boxCornerRadiusTopStart="0dp"
+                app:boxCornerRadiusTopEnd="0dp"
+                app:boxCornerRadiusBottomStart="36dp"
+                app:boxCornerRadiusBottomEnd="36dp">
 
                 <AutoCompleteTextView
                     android:layout_width="match_parent"
@@ -155,7 +170,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilTipoDocumento"
-                app:shapeAppearance="@style/ShapeAppearance.App.FormInput">
+                app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
+                app:boxCornerRadiusTopStart="0dp"
+                app:boxCornerRadiusTopEnd="0dp"
+                app:boxCornerRadiusBottomStart="36dp"
+                app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -174,7 +193,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilNumeroDocumento"
-                app:shapeAppearance="@style/ShapeAppearance.App.FormInput">
+                app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
+                app:boxCornerRadiusTopStart="0dp"
+                app:boxCornerRadiusTopEnd="0dp"
+                app:boxCornerRadiusBottomStart="36dp"
+                app:boxCornerRadiusBottomEnd="36dp">
 
                 <AutoCompleteTextView
                     android:layout_width="match_parent"
@@ -220,8 +243,7 @@
             app:iconTint="@color/black"
             app:backgroundTint="@color/white"
             app:strokeColor="@color/white"
-            app:iconSize="14dp"/>
-    </LinearLayout>
+            app:iconSize="14dp"/> </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegistrarSocioFinal"
