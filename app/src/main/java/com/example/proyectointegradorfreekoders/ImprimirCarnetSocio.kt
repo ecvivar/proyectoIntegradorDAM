@@ -1,6 +1,6 @@
 package com.example.proyectointegradorfreekoders
+
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
@@ -9,15 +9,10 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import android.widget.Toast
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.BitmapFactory
 import android.content.Context
 import java.text.SimpleDateFormat
 import java.util.Date
-
+import android.content.Intent
 
 class ImprimirCarnetSocio : AppCompatActivity() {
 
@@ -57,7 +52,14 @@ class ImprimirCarnetSocio : AppCompatActivity() {
 
         try {
             document.writeTo(FileOutputStream(file))
+            //mensaje
             Toast.makeText(context, "PDF guardado en: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+            //volver al inicio
+            val intent = Intent(this, MenuPrincipal::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+
         } catch (e: IOException) {
             e.printStackTrace()
             Toast.makeText(context, "Error al generar el PDF: ${e.message}", Toast.LENGTH_LONG).show()
@@ -66,4 +68,3 @@ class ImprimirCarnetSocio : AppCompatActivity() {
         }
     }
 }
-
