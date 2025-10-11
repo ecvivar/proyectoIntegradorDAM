@@ -9,21 +9,14 @@
     android:background="#96BEAA"
     tools:context=".MainActivity">
 
-    <!-- Guideline para posicionamiento proporcional -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
 
-    <!-- Logo centrado arriba -->
+    <!-- Logo  -->
     <ImageView
         android:id="@+id/logoClubDeportivo"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:src="@drawable/club_deportivo"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
