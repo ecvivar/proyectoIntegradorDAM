@@ -9,7 +9,6 @@
     tools:context=".RegistrarSocioActivity">
 
 
-    <!-- Logo centrado arriba -->
     <ImageView
         android:id="@+id/logoClubDeportivo"
         android:layout_width="160dp"
@@ -20,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Botón para volver atrás -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegistrarSocio"
         style="@style/Widget.Material3.Button.ElevatedButton.Icon"
@@ -38,7 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logoClubDeportivo" />
 
-    <!-- ScrollView  Contiene todo el formulario -->
     <ScrollView
         android:id="@+id/formScrollView"
         android:layout_width="0dp"
@@ -52,13 +49,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Este ConstraintLayout es el HIJO ÚNICO del ScrollView -->
-        <!-- y contiene todos los campos del formulario -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Input para NOMBRE -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNombre"
                 style="@style/Widget.App.TextInputLayout"
@@ -74,10 +68,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Inserte nombre" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    /> </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Input para APELLIDO -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilApellido"
                 style="@style/Widget.App.TextInputLayout"
@@ -94,10 +86,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Inserte apellido" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    /> </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Input para TELEFONO -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilTelefono"
                 style="@style/Widget.App.TextInputLayout"
@@ -115,10 +105,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
-                    android:hint="Inserte teléfono" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    /> </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Input para DIRECCION -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilDireccion"
                 style="@style/Widget.App.TextInputLayout"
@@ -135,10 +123,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Inserte dirección" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    /> </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Combo Box para TIPO DE DOCUMENTO -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilTipoDocumento"
                 style="@style/Widget.App.TextInputLayout.ExposedDropdown"
@@ -156,11 +142,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:hint="Seleccione tipo"/>
+                    /> </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Input para NÚMERO DE DOCUMENTO -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNumeroDocumento"
                 style="@style/Widget.App.TextInputLayout"
@@ -178,10 +161,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:hint="Inserte número de documento" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    /> </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Combo Box para SELECCIONAR PLAN -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPlan"
                 style="@style/Widget.App.TextInputLayout.ExposedDropdown"
@@ -199,15 +180,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:hint="Seleccione plan"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    /> </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
-    <!-- Fila para el CheckBox y el botón de subir Apto Físico -->
-    <!-- Esta fila se posiciona justo encima del botón final de registro -->
     <LinearLayout
         android:id="@+id/filaAptoFisico"
         android:layout_width="0dp"
@@ -221,7 +199,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btnRegistrarSocioFinal">
 
-        <!-- Checkbox para el apto físico -->
         <CheckBox
             android:id="@+id/cbAptoFisico"
             android:layout_width="wrap_content"
@@ -230,8 +207,6 @@
             android:textColor="@color/black"
             app:buttonTint="@color/black"/>
 
-        <!-- Este es el "input" para subir la imagen, estilizado como un botón -->
-        <!-- Ocupará todo el espacio restante en la fila -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubirFotoCarnet"
             style="@style/Widget.Material3.Button.OutlinedButton.Icon"
@@ -244,12 +219,10 @@
             app:icon="@drawable/upload"
             app:iconTint="@color/black"
             app:backgroundTint="@color/white"
-            app:strokeColor="@color/white"/>
-
+            app:strokeColor="@color/white"
+            app:iconSize="14dp"/>
     </LinearLayout>
 
-    <!-- Botón final para registrar al socio -->
-    <!-- Se posiciona en la parte inferior de la pantalla -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegistrarSocioFinal"
         android:layout_width="0dp"
