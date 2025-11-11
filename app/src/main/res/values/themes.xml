@@ -1,11 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.UsoVariasPantallas" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.ProyectoIntegradorFreekoders" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.UsoVariasPantallas" parent="Base.Theme.UsoVariasPantallas" />
+    <style name="Theme.ProyectoIntegradorFreekoders" parent="Base.Theme.ProyectoIntegradorFreekoders" />
 
     <!-- Estilo para el botón superior verde con esquinas personalizadas -->
     <style name="ShapeAppearance.App.Button.EsquinasPersonalizadas" parent="">

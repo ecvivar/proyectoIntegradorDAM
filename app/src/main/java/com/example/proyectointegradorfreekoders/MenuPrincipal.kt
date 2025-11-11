@@ -6,9 +6,6 @@ import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-
 
 class MenuPrincipal : AppCompatActivity() {
 
