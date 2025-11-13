@@ -10,6 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
+
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 import com.example.proyectointegradorfreekoders.database.DBHelper
 import com.example.proyectointegradorfreekoders.database.NoSocio
 
@@ -26,6 +31,9 @@ class RegistrarNoSocioActivity : AppCompatActivity() {
         }
         // Inicializar la base de datos
         val db = DBHelper(this)
+
+        // Obtener fecha actual
+        val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
         // Botón volver atrás
         val botonVolver = findViewById<MaterialButton>(R.id.btnRegistrarNoSocio)
@@ -48,7 +56,7 @@ class RegistrarNoSocioActivity : AppCompatActivity() {
                 val aptoFisico = findViewById<CheckBox>(R.id.cbAptoFisico).isChecked
 
                 // Validaciones básicas
-                if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty()) {
+                if (nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || dni.isEmpty()) {
                     Toast.makeText(this, "Complete todos los campos obligatorios", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
@@ -63,7 +71,7 @@ class RegistrarNoSocioActivity : AppCompatActivity() {
                     direccion = direccion,
                     email = email,
                     aptoFisico = aptoFisico,
-                    fechaAlta = "2025-11-12"
+                    fechaAlta = fechaActual
                 )
 
                 // Guardar en la base de datos

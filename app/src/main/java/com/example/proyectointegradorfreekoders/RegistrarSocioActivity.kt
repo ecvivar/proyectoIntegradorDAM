@@ -12,6 +12,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 import android.widget.AutoCompleteTextView
+
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 import com.example.proyectointegradorfreekoders.database.DBHelper
 import com.example.proyectointegradorfreekoders.database.Socio
 
@@ -29,6 +34,9 @@ class RegistrarSocioActivity : AppCompatActivity() {
 
         // Inicializar la base de datos
         val db = DBHelper(this)
+
+        // Obtener fecha actual
+        val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
         // Botón volver atrás
         val botonVolver = findViewById<MaterialButton>(R.id.btnRegistrarSocio)
@@ -59,7 +67,7 @@ class RegistrarSocioActivity : AppCompatActivity() {
                 val aptoFisico = findViewById<CheckBox>(R.id.cbAptoFisico).isChecked
 
                 // Validaciones básicas
-                if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || tipoPlan.isEmpty()) {
+                if (nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || dni.isEmpty() || tipoPlan.isEmpty() ) {
                     Toast.makeText(
                         this,
                         "Complete todos los campos obligatorios",
@@ -80,7 +88,7 @@ class RegistrarSocioActivity : AppCompatActivity() {
                     tipoPlan = tipoPlan,
                     aptoFisico = aptoFisico,
                     foto = null,
-                    fechaAlta = "2025-11-12"
+                    fechaAlta = fechaActual
                 )
 
                 // Guardar en la base de datos
