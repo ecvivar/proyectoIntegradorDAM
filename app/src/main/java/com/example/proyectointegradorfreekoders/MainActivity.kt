@@ -16,14 +16,14 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // 1 Inicializar la base de datos
+        // Inicializar la base de datos
         val db = DBHelper(this)
 
-        // 2 Acceder a las preferencias compartidas
+        // Acceder a las preferencias compartidas
         val prefs = getSharedPreferences("freekoders_prefs", MODE_PRIVATE)
         val usuarioCreado = prefs.getBoolean("usuario_inicial_creado", false)
 
-        // 3 Crear usuario admin solo si no existe
+        // Crear usuario admin solo si no existe
         if (!usuarioCreado) {
             val resultado = db.insertarUsuario(
                 Usuario(
@@ -42,12 +42,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // 4 Referencias a los elementos de la interfaz
+        // Referencias a los elementos de la interfaz
         val btnIngresar = findViewById<Button>(R.id.btnIngresar)
         val txtUsuario = findViewById<TextView>(R.id.txtUsuario)
         val txtPassword = findViewById<TextView>(R.id.txtPassword)
 
-        // 5 Evento de login
+        // Evento de login
         btnIngresar.setOnClickListener {
             val usuario = txtUsuario.text.toString().trim()
             val password = txtPassword.text.toString().trim()

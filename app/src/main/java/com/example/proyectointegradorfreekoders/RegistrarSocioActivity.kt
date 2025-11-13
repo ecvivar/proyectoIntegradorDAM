@@ -26,32 +26,28 @@ class RegistrarSocioActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        // -------------------------------------------------------
-        // Inicialización de DBHelper
-        // -------------------------------------------------------
+
+        // Inicializar la base de datos
         val db = DBHelper(this)
-        // -------------------------------------------------------
-        // Botón superior (volver atrás)
-        // -------------------------------------------------------
+
+        // Botón volver atrás
         val botonVolver = findViewById<MaterialButton>(R.id.btnRegistrarSocio)
         botonVolver.setOnClickListener {
             finish()
         }
-        // -------------------------------------------------------
+
         // Spinner (AutoCompleteTextView) para Tipo de Plan
-        // -------------------------------------------------------
         val autoTipoPlan = findViewById<AutoCompleteTextView>(R.id.txtPlan)
         val planes = resources.getStringArray(R.array.tipoPlan)
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, planes)
         autoTipoPlan.setAdapter(adapter)
-        // -------------------------------------------------------
-        // Botón final (Registrar socio)
-        // -------------------------------------------------------
 
+        // Botón Registrar socio)
         val btnFinal = findViewById<MaterialButton>(R.id.btnRegistrarSocioFinal)
 
         btnFinal.setOnClickListener {
             try {
+
                 // Obtener datos de los campos del formulario
                 val nombre = findViewById<EditText>(R.id.txtNombre).text.toString().trim()
                 val apellido = findViewById<EditText>(R.id.txtApellido).text.toString().trim()
@@ -84,7 +80,7 @@ class RegistrarSocioActivity : AppCompatActivity() {
                     tipoPlan = tipoPlan,
                     aptoFisico = aptoFisico,
                     foto = null,
-                    fechaAlta = "2025-11-12" // Podés usar fecha actual si querés
+                    fechaAlta = "2025-11-12"
                 )
 
                 // Guardar en la base de datos
