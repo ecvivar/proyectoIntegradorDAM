@@ -10,4 +10,12 @@
         <item>3 cuotas</item>
         <item>6 cuotas</item>
     </string-array>
+    <!-- Para el menu desplegable tipoPlan-->
+    <string-array name="tipoPlan">
+        <item>Mensual</item>
+        <item>Trimestral</item>
+        <item>Semestral</item>
+        <item>Anual</item>
+        <item>Libre (pago por clase)</item>
+    </string-array>
 </resources>

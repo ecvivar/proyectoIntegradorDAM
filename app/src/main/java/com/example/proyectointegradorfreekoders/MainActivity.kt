@@ -7,6 +7,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.proyectointegradorfreekoders.database.DBHelper
+import com.example.proyectointegradorfreekoders.database.Usuario
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,25 +19,35 @@ class MainActivity : AppCompatActivity() {
         // 1 Inicializar la base de datos
         val db = DBHelper(this)
 
-        // 2 Crear usuario por defecto si no existe
-        val usuarios = db.obtenerUsuarios()
-        if (usuarios.isEmpty()) {
-            db.insertarUsuario(
+        // 2 Acceder a las preferencias compartidas
+        val prefs = getSharedPreferences("freekoders_prefs", MODE_PRIVATE)
+        val usuarioCreado = prefs.getBoolean("usuario_inicial_creado", false)
+
+        // 3 Crear usuario admin solo si no existe
+        if (!usuarioCreado) {
+            val resultado = db.insertarUsuario(
                 Usuario(
                     id = 0,
-                    nombreUsuario = "admin@freekoders.com",
+                    nombre_usuario = "admin@correo.com",
                     password = "1234",
                     rol = "administrador"
                 )
             )
+            if (resultado != -1L) {
+                // Guardar la bandera para no volver a crear el usuario
+                prefs.edit().putBoolean("usuario_inicial_creado", true).apply()
+                Toast.makeText(this, "Usuario admin creado por primera vez", Toast.LENGTH_SHORT).show()
+            }else {
+                Toast.makeText(this, "Error al crear el usuario admin", Toast.LENGTH_LONG).show()
+            }
         }
 
-        // 3 Referencias a los elementos de la interfaz
+        // 4 Referencias a los elementos de la interfaz
         val btnIngresar = findViewById<Button>(R.id.btnIngresar)
         val txtUsuario = findViewById<TextView>(R.id.txtUsuario)
         val txtPassword = findViewById<TextView>(R.id.txtPassword)
 
-        // 4 Evento de login
+        // 5 Evento de login
         btnIngresar.setOnClickListener {
             val usuario = txtUsuario.text.toString().trim()
             val password = txtPassword.text.toString().trim()

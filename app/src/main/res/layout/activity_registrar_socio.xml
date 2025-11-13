@@ -64,10 +64,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
-                app:boxCornerRadiusTopStart="0dp"          app:boxCornerRadiusTopEnd="0dp"            app:boxCornerRadiusBottomStart="36dp"      app:boxCornerRadiusBottomEnd="36dp">       <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                /> </com.google.android.material.textfield.TextInputLayout>
+                app:boxCornerRadiusTopStart="0dp"
+                app:boxCornerRadiusTopEnd="0dp"
+                app:boxCornerRadiusBottomStart="36dp"
+                app:boxCornerRadiusBottomEnd="36dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    /> </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilApellido"
@@ -87,6 +93,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtApellido"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     /> </com.google.android.material.textfield.TextInputLayout>
@@ -109,6 +116,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtTelefono"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
@@ -132,32 +140,33 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtDireccion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     /> </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilTipoDocumento"
-                style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                android:id="@+id/tilEmail"
+                style="@style/Widget.App.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="TIPO DE DOCUMENTO"
+                android:hint="CORREO ELECTRONICO"
                 app:boxBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilDireccion"
-                app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
                 app:boxCornerRadiusTopStart="0dp"
                 app:boxCornerRadiusTopEnd="0dp"
                 app:boxCornerRadiusBottomStart="36dp"
                 app:boxCornerRadiusBottomEnd="36dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    /> </com.google.android.material.textfield.TextInputLayout>
+                    android:inputType="textEmailAddress"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNumeroDocumento"
@@ -169,7 +178,7 @@
                 app:boxBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilTipoDocumento"
+                app:layout_constraintTop_toBottomOf="@id/tilEmail"
                 app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
                 app:boxCornerRadiusTopStart="0dp"
                 app:boxCornerRadiusTopEnd="0dp"
@@ -177,6 +186,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtDocumento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -200,6 +210,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <AutoCompleteTextView
+                    android:id="@+id/txtPlan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"

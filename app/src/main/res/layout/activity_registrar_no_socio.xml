@@ -143,12 +143,12 @@
                     /> </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilTipoDocumento"
-                style="@style/Widget.App.TextInputLayout.ExposedDropdown"
+                android:id="@+id/tilEmail"
+                style="@style/Widget.App.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="TIPO DE DOCUMENTO"
+                android:hint="CORREO ELECTRONICO"
                 app:boxBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -159,11 +159,12 @@
                 app:boxCornerRadiusBottomStart="36dp"
                 app:boxCornerRadiusBottomEnd="36dp">
 
-                <AutoCompleteTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    /> </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNumeroDocumento"
@@ -175,7 +176,7 @@
                 app:boxBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilTipoDocumento"
+                app:layout_constraintTop_toBottomOf="@id/tilEmail"
                 app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
                 app:boxCornerRadiusTopStart="0dp"
                 app:boxCornerRadiusTopEnd="0dp"
