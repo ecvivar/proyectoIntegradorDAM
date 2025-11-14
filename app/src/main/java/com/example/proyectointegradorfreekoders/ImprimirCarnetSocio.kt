@@ -1,25 +1,28 @@
 package com.example.proyectointegradorfreekoders
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.pdf.PdfDocument
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.button.MaterialButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.example.proyectointegradorfreekoders.database.DBHelper
 import com.example.proyectointegradorfreekoders.database.Socio
+import com.google.android.material.button.MaterialButton
 import java.io.File
 import java.io.FileOutputStream
 
 class ImprimirCarnetSocio : AppCompatActivity() {
 
     private lateinit var db: DBHelper
+    private val REQUEST_SHARE_PDF = 2001  // Código para el resultado del share
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +30,7 @@ class ImprimirCarnetSocio : AppCompatActivity() {
 
         db = DBHelper(this)
 
-        // 1. Obtenemos el ID enviado desde la lista
+        // Obtiene el ID del socio enviado desde la lista
         val idSocio = intent.getIntExtra("idSocio", -1)
 
         if (idSocio == -1) {
@@ -36,7 +39,7 @@ class ImprimirCarnetSocio : AppCompatActivity() {
             return
         }
 
-        // 2. Obtener socio desde SQLite
+        // Obtener socio desde SQLite
         val socio = db.obtenerSocioPorId(idSocio)
 
         if (socio == null) {
@@ -45,97 +48,94 @@ class ImprimirCarnetSocio : AppCompatActivity() {
             return
         }
 
-        // 3. Cargar datos en el layout
         cargarDatosEnPantalla(socio)
 
-        // 4. Botón imprimir
+        // Botón imprimir
         val btnImprimir = findViewById<MaterialButton>(R.id.btnImprimir)
         btnImprimir.setOnClickListener {
-            // Consultar el socio desde BD por id enviado
-            val socio = db.obtenerSocioPorId(idSocio)
-                if (socio != null) {
-                    generarPdfCarnet(socio)
-                } else {
-                    Toast.makeText(this, "Error: socio no encontrado", Toast.LENGTH_LONG).show()
-                }
+            generarPdfDesdeLayout()
         }
     }
 
-    // Función para cargar datos en el layout
     private fun cargarDatosEnPantalla(socio: Socio) {
-        val tvNombre = findViewById<TextView>(R.id.tvNombre)
-        val tvDni = findViewById<TextView>(R.id.tvDni)
-        val tvSocio = findViewById<TextView>(R.id.tvSocio)
+        findViewById<TextView>(R.id.tvNombre).text = "${socio.nombre} ${socio.apellido}"
+        findViewById<TextView>(R.id.tvDni).text = socio.dni
+        findViewById<TextView>(R.id.tvSocio).text = socio.id.toString()
 
-        tvNombre.text = "${socio.nombre} ${socio.apellido}"
-        tvDni.text = socio.dni
-        tvSocio.text = socio.id.toString()
-
-        // Foto (si luego la guardamos en DB)
         val image = findViewById<ImageView>(R.id.imgSocio)
         image.setImageResource(R.drawable.foto_socio)
     }
 
-    // Función para generar PDF
-    private fun generarPdfCarnet(socio: Socio) {
-        val pdfDocument = PdfDocument()
-
-        // Tamaño de página A6 (ideal carnet)
-        val pageInfo = PdfDocument.PageInfo.Builder(350, 550, 1).create()
-        val page = pdfDocument.startPage(pageInfo)
-
-        val canvas = page.canvas
-        val paint = Paint()
-
-        // Fondo blanco
-        paint.color = Color.WHITE
-        canvas.drawRect(0f, 0f, pageInfo.pageWidth.toFloat(), pageInfo.pageHeight.toFloat(), paint)
-
-        // Título
-        paint.color = Color.BLACK
-        paint.textSize = 22f
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        canvas.drawText("CARNET DE SOCIO", 60f, 50f, paint)
-
-        // Datos del socio
-        paint.textSize = 16f
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-
-        canvas.drawText("Nombre: ${socio.nombre} ${socio.apellido}", 40f, 120f, paint)
-        canvas.drawText("DNI: ${socio.dni}", 40f, 160f, paint)
-        canvas.drawText("N° Socio: ${socio.id}", 40f, 200f, paint)
-        canvas.drawText("Plan: ${socio.tipoPlan}", 40f, 240f, paint)
-
-        pdfDocument.finishPage(page)
-
-        // Ruta donde guardar el archivo
-        val nombreArchivo = "carnet_${socio.id}.pdf"
-        val file = File(getExternalFilesDir(null), nombreArchivo)
-
-        try {
-            pdfDocument.writeTo(FileOutputStream(file))
-            Toast.makeText(this, "PDF generado correctamente", Toast.LENGTH_SHORT).show()
-            compartirPdf(file) // ← Abre diálogo para compartir
-
-        } catch (e: Exception) {
-            Toast.makeText(this, "Error generando PDF: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-        pdfDocument.close()
+    // Convertir layout a bitmap
+    private fun viewToBitmap(view: View): Bitmap {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
     }
 
-    // Función para compartir PDF
+    // Generar PDF desde layout
+    private fun generarPdfDesdeLayout() {
+
+        val contenedor = findViewById<View>(R.id.contenedorDatos)
+
+        contenedor.post {
+            val bitmap = viewToBitmap(contenedor)
+
+            val document = PdfDocument()
+            val pageInfo = PdfDocument.PageInfo.Builder(bitmap.width, bitmap.height, 1).create()
+            val page = document.startPage(pageInfo)
+
+            val canvas = page.canvas
+            canvas.drawBitmap(bitmap, 0f, 0f, null)
+
+            document.finishPage(page)
+
+            val file = File(getExternalFilesDir(null), "carnet_socio.pdf")
+            document.writeTo(FileOutputStream(file))
+            document.close()
+
+            compartirPdf(file) // Ahora el share maneja el retorno
+        }
+    }
+
+    // Compartir PDF con callback
     private fun compartirPdf(file: File) {
+
         val uri = FileProvider.getUriForFile(
             this,
             "${packageName}.provider",
             file
         )
 
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "application/pdf"
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
 
-        startActivity(Intent.createChooser(intent, "Compartir carnet PDF"))
+        val chooser = Intent.createChooser(intent, "Compartir carnet")
+
+        startActivityForResult(chooser, REQUEST_SHARE_PDF)
+    }
+
+    // Volver al menú después de compartir
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_SHARE_PDF) {
+            mostrarMensajeYVolver()
+        }
+    }
+
+    private fun mostrarMensajeYVolver() {
+        Toast.makeText(this, "Carnet generado con éxito", Toast.LENGTH_SHORT).show()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, MenuPrincipal::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        }, 1500)
     }
 }
