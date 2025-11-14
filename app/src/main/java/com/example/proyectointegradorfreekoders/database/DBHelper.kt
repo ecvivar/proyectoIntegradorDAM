@@ -211,4 +211,55 @@ class DBHelper(context: Context) :
         }
         return db.insert("no_socios", null, values)
     }
+
+    // Obtener Socios
+    fun obtenerSocioPorId(id: Int): Socio? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM socios WHERE id_socio = ?", arrayOf(id.toString()))
+
+        return if (cursor.moveToFirst()) {
+            Socio(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow("id_socio")),
+                dni = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
+                nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
+                telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
+                direccion = cursor.getString(cursor.getColumnIndexOrThrow("direccion")),
+                email = cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                tipoPlan = cursor.getString(cursor.getColumnIndexOrThrow("tipo_plan")),
+                aptoFisico = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
+                foto = cursor.getString(cursor.getColumnIndexOrThrow("foto")),
+                fechaAlta = cursor.getString(cursor.getColumnIndexOrThrow("fecha_alta")),
+            )
+        } else null
+    }
+    // Obtener todos los socios
+    fun obtenerTodosLosSocios(): List<Socio> {
+        val lista = mutableListOf<Socio>()
+        val db = readableDatabase
+
+        val cursor = db.rawQuery("SELECT * FROM socios ORDER BY apellido, nombre", null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val socio = Socio(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id_socio")),
+                    dni = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
+                    nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                    apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
+                    telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
+                    direccion = cursor.getString(cursor.getColumnIndexOrThrow("direccion")),
+                    email = cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                    tipoPlan = cursor.getString(cursor.getColumnIndexOrThrow("tipo_plan")),
+                    aptoFisico = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
+                    foto = cursor.getString(cursor.getColumnIndexOrThrow("foto")),
+                    fechaAlta = cursor.getString(cursor.getColumnIndexOrThrow("fecha_alta"))
+                )
+                lista.add(socio)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return lista
+    }
 }
