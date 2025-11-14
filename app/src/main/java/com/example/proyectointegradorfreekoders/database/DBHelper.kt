@@ -308,4 +308,54 @@ class DBHelper(context: Context) :
         }
         return lista
     }
+
+    // Buscar socios por DNI
+    fun buscarSocioPorDni(parcial: String): List<Socio> {
+        val lista = mutableListOf<Socio>()
+        val db = readableDatabase
+
+        val query = "SELECT * FROM socios WHERE dni LIKE ? ORDER BY apellido ASC"
+        val cursor = db.rawQuery(query, arrayOf("%$parcial%"))
+
+        cursor.use {
+            if (cursor.moveToFirst()) {
+
+                val idxId = cursor.getColumnIndexOrThrow("id_socio")
+                val idxDni = cursor.getColumnIndexOrThrow("dni")
+                val idxNombre = cursor.getColumnIndexOrThrow("nombre")
+                val idxApellido = cursor.getColumnIndexOrThrow("apellido")
+                val idxTelefono = cursor.getColumnIndexOrThrow("telefono")
+                val idxDireccion = cursor.getColumnIndexOrThrow("direccion")
+                val idxEmail = cursor.getColumnIndexOrThrow("email")
+                val idxTipoPlan = cursor.getColumnIndexOrThrow("tipo_plan")
+                val idxAptoFisico = cursor.getColumnIndexOrThrow("apto_fisico")
+                val idxFoto = cursor.getColumnIndexOrThrow("foto")
+                val idxFechaAlta = cursor.getColumnIndexOrThrow("fecha_alta")
+
+                do {
+                    val fotoBlob: ByteArray? =
+                        if (cursor.isNull(idxFoto)) null
+                        else cursor.getBlob(idxFoto)
+
+                    val socio = Socio(
+                        id = cursor.getInt(idxId),
+                        dni = cursor.getString(idxDni),
+                        nombre = cursor.getString(idxNombre),
+                        apellido = cursor.getString(idxApellido),
+                        telefono = cursor.getString(idxTelefono),
+                        direccion = cursor.getString(idxDireccion),
+                        email = cursor.getString(idxEmail),
+                        tipoPlan = cursor.getString(idxTipoPlan),
+                        aptoFisico = cursor.getInt(idxAptoFisico) == 1,
+                        foto = fotoBlob,
+                        fechaAlta = cursor.getString(idxFechaAlta)
+                    )
+
+                    lista.add(socio)
+
+                } while (cursor.moveToNext())
+            }
+        }
+        return lista
+    }
 }

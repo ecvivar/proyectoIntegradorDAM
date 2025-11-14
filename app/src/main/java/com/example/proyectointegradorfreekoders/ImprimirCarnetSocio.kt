@@ -13,11 +13,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import com.example.proyectointegradorfreekoders.database.DBHelper
-import com.example.proyectointegradorfreekoders.database.Socio
 import com.google.android.material.button.MaterialButton
 import java.io.File
 import java.io.FileOutputStream
+
+import com.example.proyectointegradorfreekoders.database.DBHelper
+import com.example.proyectointegradorfreekoders.database.Socio
 
 class ImprimirCarnetSocio : AppCompatActivity() {
 
@@ -63,7 +64,17 @@ class ImprimirCarnetSocio : AppCompatActivity() {
         findViewById<TextView>(R.id.tvSocio).text = socio.id.toString()
 
         val image = findViewById<ImageView>(R.id.imgSocio)
-        image.setImageResource(R.drawable.foto_socio)
+        // Mostrar foto del socio desde la base BLOB
+        if (socio.foto != null) {
+            val bmp = android.graphics.BitmapFactory.decodeByteArray(
+                socio.foto,
+                0,
+                socio.foto.size
+            )
+            image.setImageBitmap(bmp)
+        } else {
+            image.setImageResource(R.drawable.foto_socio)
+        }
     }
 
     // Convertir layout a bitmap
