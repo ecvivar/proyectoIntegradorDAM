@@ -9,71 +9,59 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.proyectointegradorfreekoders.database.DBHelper
-import com.example.proyectointegradorfreekoders.database.NoSocio
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
+
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+import com.example.proyectointegradorfreekoders.database.DBHelper
+import com.example.proyectointegradorfreekoders.database.NoSocio
+
 class RegistrarNoSocioActivity : AppCompatActivity() {
-
-    private lateinit var db: DBHelper
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_registrar_no_socio)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        // Inicializar la base de datos
+        val db = DBHelper(this)
 
-        db = DBHelper(this)
+        // Obtener fecha actual
+        val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
-        // Buscamos
-        val tilNombre = findViewById<TextInputLayout>(R.id.tilNombre)
-        val tilApellido = findViewById<TextInputLayout>(R.id.tilApellido)
-        val tilTelefono = findViewById<TextInputLayout>(R.id.tilTelefono)
-        val tilDireccion = findViewById<TextInputLayout>(R.id.tilDireccion)
-        val tilDNI = findViewById<TextInputLayout>(R.id.tilNumeroDocumento)
-        val etNombre = tilNombre.editText
-        val etApellido = tilApellido.editText
-        val etTelefono = tilTelefono.editText
-        val etDireccion = tilDireccion.editText
-        val etDNI = tilDNI.editText
-        val etEmail = findViewById<EditText>(R.id.txtEmail)
-        val chkAptoFisico = findViewById<CheckBox>(R.id.cbAptoFisico)
-        val btnFinal = findViewById<MaterialButton>(R.id.btnRegistrarNoSocioFinal)
+        // Botón volver atrás
         val botonVolver = findViewById<MaterialButton>(R.id.btnRegistrarNoSocio)
-
-
         botonVolver.setOnClickListener {
             finish()
         }
 
+        // Botón Registrar No Socio
+        val btnFinal = findViewById<MaterialButton>(R.id.btnRegistrarNoSocioFinal)
         btnFinal.setOnClickListener {
             try {
-                // Recolectamos los datos
-                val nombre = etNombre?.text.toString().trim()
-                val apellido = etApellido?.text.toString().trim()
-                val telefono = etTelefono?.text.toString().trim()
-                val direccion = etDireccion?.text.toString().trim()
-                val email = etEmail.text.toString().trim()
-                val dni = etDNI?.text.toString().trim()
-                val aptoFisico = chkAptoFisico.isChecked
 
-                // Validacion
-                if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty()) {
-                    Toast.makeText(this, "Nombre, Apellido y DNI son obligatorios", Toast.LENGTH_SHORT).show()
+                // Obtener datos de los campos del formulario
+                val nombre = findViewById<EditText>(R.id.txtNombre).text.toString().trim()
+                val apellido = findViewById<EditText>(R.id.txtApellido).text.toString().trim()
+                val telefono = findViewById<EditText>(R.id.txtTelefono).text.toString().trim()
+                val direccion = findViewById<EditText>(R.id.txtDireccion).text.toString().trim()
+                val email = findViewById<EditText>(R.id.txtEmail).text.toString().trim()
+                val dni = findViewById<EditText>(R.id.txtDocumento).text.toString().trim()
+                val aptoFisico = findViewById<CheckBox>(R.id.cbAptoFisico).isChecked
+
+                // Validaciones básicas
+                if (nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || dni.isEmpty()) {
+                    Toast.makeText(this, "Complete todos los campos obligatorios", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
-                // Creamos el objeto NoSocio
-                val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-
+                // Crear objeto no socio
                 val noSocio = NoSocio(
                     id = 0,
                     dni = dni,
@@ -86,16 +74,17 @@ class RegistrarNoSocioActivity : AppCompatActivity() {
                     fechaAlta = fechaActual
                 )
 
-                // Guardamos en la Base de Datos
+                // Guardar en la base de datos
                 val resultado = db.insertarNoSocio(noSocio)
 
-                // Verificamos el resultado
                 if (resultado != -1L) {
+                    // Registro exitoso → ir a la pantalla de confirmación
                     val intent = Intent(this, RegistrarNoSocioCorrectoActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    Toast.makeText(this, "Error al registrar. ¿El DNI ya existe?", Toast.LENGTH_SHORT).show()
+                    // Error → solo mostrar mensaje
+                    Toast.makeText(this, "Error al registrar no socio", Toast.LENGTH_SHORT).show()
                 }
 
             } catch (e: Exception) {

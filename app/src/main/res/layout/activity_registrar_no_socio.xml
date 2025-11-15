@@ -59,7 +59,7 @@
                 style="@style/Widget.App.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="NOMBRE"
+                android:hint="NOMBRE *"
                 app:boxBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +71,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtNombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     /> </com.google.android.material.textfield.TextInputLayout>
@@ -81,7 +82,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="APELLIDO"
+                android:hint="APELLIDO *"
                 app:boxBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -93,6 +94,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtApellido"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     /> </com.google.android.material.textfield.TextInputLayout>
@@ -103,7 +105,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="TELEFONO"
+                android:hint="TELEFONO *"
                 app:boxBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,6 +117,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtTelefono"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
@@ -138,6 +141,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtDireccion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     /> </com.google.android.material.textfield.TextInputLayout>
@@ -172,7 +176,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="NÚMERO DE DOCUMENTO"
+                android:hint="NÚMERO DE DOCUMENTO *"
                 app:boxBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -184,6 +188,7 @@
                 app:boxCornerRadiusBottomEnd="36dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtDocumento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"

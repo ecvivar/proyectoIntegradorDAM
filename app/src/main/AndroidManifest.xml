@@ -12,6 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoIntegradorFreekoders">
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.proyectointegradorfreekoders.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".BuscarSocioImprimirActivity"
+            android:exported="false" />
+
         <activity
             android:name=".AsignarActividadNoSocio2"
             android:exported="false" />
