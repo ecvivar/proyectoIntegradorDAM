@@ -36,10 +36,10 @@ class MenuBottomSheet : BottomSheetDialogFragment() {
 
         val botonAsignarActividadNoSocio = view.findViewById<MaterialButton>(R.id.btnAsignarActividad)
         botonAsignarActividadNoSocio.setOnClickListener {
-            val intent = Intent(requireContext(), AsignarActividadNoSocioActivity::class.java)
-                startActivity(intent)
-                dismiss()
-            }
+            val intent = Intent(requireContext(), BuscarNoSocioActivity::class.java)
+            startActivity(intent)
+            dismiss()
+        }
 
         val btnImprimirCarnet = view.findViewById<MaterialButton>(R.id.btnImprimirCarnet)
         btnImprimirCarnet.setOnClickListener {

@@ -2,13 +2,13 @@ package com.example.proyectointegradorfreekoders.database
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import java.sql.Blob
 
-// ---------------------
-// 1. Data Classes
-// ---------------------
+
+// Data clases
+
 data class Usuario(
     val id: Int,
     val nombre_usuario: String,
@@ -56,6 +56,7 @@ data class Pago(
     val concepto: String,
     val monto: Double,
     val fechaPago: String,
+    val fechaVencimiento: String?,
     val medioPago: String
 )
 
@@ -66,15 +67,14 @@ data class Vencimiento(
     val estado: String
 )
 
-// ---------------------
-// 2. DBHelper
-// ---------------------
+
+// DBHelper
 class DBHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "club_freekoders.db"
-        private const val DATABASE_VERSION = 3 // incrementado
+        private const val DATABASE_VERSION = 3
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -90,7 +90,7 @@ class DBHelper(context: Context) :
         """
         )
 
-        // Tabla socios (ahora con email y tipo_plan)
+        // Tabla socios
         db.execSQL(
             """
             CREATE TABLE socios (
@@ -103,13 +103,13 @@ class DBHelper(context: Context) :
                 email TEXT,
                 tipo_plan TEXT,
                 apto_fisico INTEGER,
-                foto ,
+                foto BLOB,
                 fecha_alta TEXT
             )
         """
         )
 
-        // Tabla no socios (con email)
+        // Tabla no socios
         db.execSQL(
             """
             CREATE TABLE no_socios (
@@ -136,6 +136,7 @@ class DBHelper(context: Context) :
                 concepto TEXT,
                 monto REAL,
                 fecha_pago TEXT,
+                fecha_vencimiento TEXT,
                 medio_pago TEXT
             )
         """
@@ -155,9 +156,6 @@ class DBHelper(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 2) {
-            db.execSQL("ALTER TABLE socios ADD COLUMN foto BLOB")
-        }
         db.execSQL("DROP TABLE IF EXISTS usuarios")
         db.execSQL("DROP TABLE IF EXISTS socios")
         db.execSQL("DROP TABLE IF EXISTS no_socios")
@@ -166,11 +164,10 @@ class DBHelper(context: Context) :
         onCreate(db)
     }
 
-    // ---------------------
-    // 3. Métodos DAO
-    // ---------------------
 
-    // USUARIOS
+    // Metodos DAO
+
+    // Metodos de usuario
     fun insertarUsuario(usuario: Usuario): Long {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -192,7 +189,7 @@ class DBHelper(context: Context) :
         return existe
     }
 
-    // SOCIOS
+    // Metodos de socio
     fun insertarSocio(socio: Socio): Long {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -210,23 +207,6 @@ class DBHelper(context: Context) :
         return db.insert("socios", null, values)
     }
 
-    // NO SOCIOS
-    fun insertarNoSocio(noSocio: NoSocio): Long {
-        val db = writableDatabase
-        val values = ContentValues().apply {
-            put("dni", noSocio.dni)
-            put("nombre", noSocio.nombre)
-            put("apellido", noSocio.apellido)
-            put("telefono", noSocio.telefono)
-            put("direccion", noSocio.direccion)
-            put("email", noSocio.email)
-            put("apto_fisico", if (noSocio.aptoFisico) 1 else 0)
-            put("fecha_alta", noSocio.fechaAlta)
-        }
-        return db.insert("no_socios", null, values)
-    }
-
-    // Obtener Socios
     fun obtenerSocioPorId(id: Int): Socio? {
         val db = readableDatabase
         val cursor = db.rawQuery("SELECT * FROM socios WHERE id_socio = ?", arrayOf(id.toString()))
@@ -250,7 +230,7 @@ class DBHelper(context: Context) :
                     email = it.getString(it.getColumnIndexOrThrow("email")),
                     tipoPlan = it.getString(it.getColumnIndexOrThrow("tipo_plan")),
                     aptoFisico = it.getInt(it.getColumnIndexOrThrow("apto_fisico")) == 1,
-                    foto = fotoBlob, // ByteArray? or null
+                    foto = fotoBlob,
                     fechaAlta = it.getString(it.getColumnIndexOrThrow("fecha_alta"))
                 )
             }
@@ -258,7 +238,6 @@ class DBHelper(context: Context) :
         return socio
     }
 
-    // Obtener todos los socios
     fun obtenerTodosLosSocios(): List<Socio> {
         val lista = mutableListOf<Socio>()
         val db = readableDatabase
@@ -268,48 +247,30 @@ class DBHelper(context: Context) :
 
         cursor.use {
             if (cursor.moveToFirst()) {
-
-                // Obtener índices de columnas (más eficiente)
-                val idxId = cursor.getColumnIndexOrThrow("id_socio")
-                val idxDni = cursor.getColumnIndexOrThrow("dni")
-                val idxNombre = cursor.getColumnIndexOrThrow("nombre")
-                val idxApellido = cursor.getColumnIndexOrThrow("apellido")
-                val idxTelefono = cursor.getColumnIndexOrThrow("telefono")
-                val idxDireccion = cursor.getColumnIndexOrThrow("direccion")
-                val idxEmail = cursor.getColumnIndexOrThrow("email")
-                val idxTipoPlan = cursor.getColumnIndexOrThrow("tipo_plan")
-                val idxAptoFisico = cursor.getColumnIndexOrThrow("apto_fisico")
-                val idxFoto = cursor.getColumnIndexOrThrow("foto")
-                val idxFechaAlta = cursor.getColumnIndexOrThrow("fecha_alta")
-
                 do {
                     val fotoBlob: ByteArray? =
-                        if (cursor.isNull(idxFoto)) null
-                        else cursor.getBlob(idxFoto)
+                        if (cursor.isNull(cursor.getColumnIndexOrThrow("foto"))) null
+                        else cursor.getBlob(cursor.getColumnIndexOrThrow("foto"))
 
-                    val socio = Socio(
-                        id = cursor.getInt(idxId),
-                        dni = cursor.getString(idxDni),
-                        nombre = cursor.getString(idxNombre),
-                        apellido = cursor.getString(idxApellido),
-                        telefono = cursor.getString(idxTelefono),
-                        direccion = cursor.getString(idxDireccion),
-                        email = cursor.getString(idxEmail),
-                        tipoPlan = cursor.getString(idxTipoPlan),
-                        aptoFisico = cursor.getInt(idxAptoFisico) == 1,
+                    lista.add(Socio(
+                        id = cursor.getInt(cursor.getColumnIndexOrThrow("id_socio")),
+                        dni = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
+                        nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                        apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
+                        telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
+                        direccion = cursor.getString(cursor.getColumnIndexOrThrow("direccion")),
+                        email = cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                        tipoPlan = cursor.getString(cursor.getColumnIndexOrThrow("tipo_plan")),
+                        aptoFisico = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
                         foto = fotoBlob,
-                        fechaAlta = cursor.getString(idxFechaAlta)
-                    )
-
-                    lista.add(socio)
-
+                        fechaAlta = cursor.getString(cursor.getColumnIndexOrThrow("fecha_alta"))
+                    ))
                 } while (cursor.moveToNext())
             }
         }
         return lista
     }
 
-    // Buscar socios por DNI
     fun buscarSocioPorDni(parcial: String): List<Socio> {
         val lista = mutableListOf<Socio>()
         val db = readableDatabase
@@ -319,43 +280,153 @@ class DBHelper(context: Context) :
 
         cursor.use {
             if (cursor.moveToFirst()) {
-
-                val idxId = cursor.getColumnIndexOrThrow("id_socio")
-                val idxDni = cursor.getColumnIndexOrThrow("dni")
-                val idxNombre = cursor.getColumnIndexOrThrow("nombre")
-                val idxApellido = cursor.getColumnIndexOrThrow("apellido")
-                val idxTelefono = cursor.getColumnIndexOrThrow("telefono")
-                val idxDireccion = cursor.getColumnIndexOrThrow("direccion")
-                val idxEmail = cursor.getColumnIndexOrThrow("email")
-                val idxTipoPlan = cursor.getColumnIndexOrThrow("tipo_plan")
-                val idxAptoFisico = cursor.getColumnIndexOrThrow("apto_fisico")
-                val idxFoto = cursor.getColumnIndexOrThrow("foto")
-                val idxFechaAlta = cursor.getColumnIndexOrThrow("fecha_alta")
-
                 do {
                     val fotoBlob: ByteArray? =
-                        if (cursor.isNull(idxFoto)) null
-                        else cursor.getBlob(idxFoto)
+                        if (cursor.isNull(cursor.getColumnIndexOrThrow("foto"))) null
+                        else cursor.getBlob(cursor.getColumnIndexOrThrow("foto"))
 
-                    val socio = Socio(
-                        id = cursor.getInt(idxId),
-                        dni = cursor.getString(idxDni),
-                        nombre = cursor.getString(idxNombre),
-                        apellido = cursor.getString(idxApellido),
-                        telefono = cursor.getString(idxTelefono),
-                        direccion = cursor.getString(idxDireccion),
-                        email = cursor.getString(idxEmail),
-                        tipoPlan = cursor.getString(idxTipoPlan),
-                        aptoFisico = cursor.getInt(idxAptoFisico) == 1,
+                    lista.add(Socio(
+                        id = cursor.getInt(cursor.getColumnIndexOrThrow("id_socio")),
+                        dni = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
+                        nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                        apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
+                        telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
+                        direccion = cursor.getString(cursor.getColumnIndexOrThrow("direccion")),
+                        email = cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                        tipoPlan = cursor.getString(cursor.getColumnIndexOrThrow("tipo_plan")),
+                        aptoFisico = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
                         foto = fotoBlob,
-                        fechaAlta = cursor.getString(idxFechaAlta)
-                    )
-
-                    lista.add(socio)
-
+                        fechaAlta = cursor.getString(cursor.getColumnIndexOrThrow("fecha_alta"))
+                    ))
                 } while (cursor.moveToNext())
             }
         }
         return lista
     }
+
+
+    // Metodos de no socio
+    fun insertarNoSocio(noSocio: NoSocio): Long {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("dni", noSocio.dni)
+            put("nombre", noSocio.nombre)
+            put("apellido", noSocio.apellido)
+            put("telefono", noSocio.telefono)
+            put("direccion", noSocio.direccion)
+            put("email", noSocio.email)
+            put("apto_fisico", if (noSocio.aptoFisico) 1 else 0)
+            put("fecha_alta", noSocio.fechaAlta)
+        }
+        return db.insert("no_socios", null, values)
+    }
+
+
+    fun obtenerNoSocioPorId(id: Int): NoSocio? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM no_socios WHERE id_no_socio = ?", arrayOf(id.toString()))
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                val noSocio = NoSocio(
+                    id = it.getInt(it.getColumnIndexOrThrow("id_no_socio")),
+                    dni = it.getString(it.getColumnIndexOrThrow("dni")),
+                    nombre = it.getString(it.getColumnIndexOrThrow("nombre")),
+                    apellido = it.getString(it.getColumnIndexOrThrow("apellido")),
+                    telefono = it.getString(it.getColumnIndexOrThrow("telefono")),
+                    direccion = it.getString(it.getColumnIndexOrThrow("direccion")),
+                    email = it.getString(it.getColumnIndexOrThrow("email")),
+                    aptoFisico = it.getInt(it.getColumnIndexOrThrow("apto_fisico")) == 1,
+                    fechaAlta = it.getString(it.getColumnIndexOrThrow("fecha_alta"))
+                )
+                return noSocio
+            }
+        }
+        return null
+    }
+
+    fun obtenerTodosLosNoSocios(): List<NoSocio> {
+        val lista = mutableListOf<NoSocio>()
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM no_socios ORDER BY apellido, nombre", null)
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                do {
+                    lista.add(
+                        NoSocio(
+                            id = it.getInt(it.getColumnIndexOrThrow("id_no_socio")),
+                            dni = it.getString(it.getColumnIndexOrThrow("dni")),
+                            nombre = it.getString(it.getColumnIndexOrThrow("nombre")),
+                            apellido = it.getString(it.getColumnIndexOrThrow("apellido")),
+                            telefono = it.getString(it.getColumnIndexOrThrow("telefono")),
+                            direccion = it.getString(it.getColumnIndexOrThrow("direccion")),
+                            email = it.getString(it.getColumnIndexOrThrow("email")),
+                            aptoFisico = it.getInt(it.getColumnIndexOrThrow("apto_fisico")) == 1,
+                            fechaAlta = it.getString(it.getColumnIndexOrThrow("fecha_alta"))
+                        )
+                    )
+                } while (it.moveToNext())
+            }
+        }
+        return lista
+    }
+
+    fun buscarNoSocioPorDni(parcial: String): List<NoSocio> {
+        if(parcial.isEmpty()) return obtenerTodosLosNoSocios()
+
+        val lista = mutableListOf<NoSocio>()
+        val db = readableDatabase
+
+        val query = "SELECT * FROM no_socios WHERE dni LIKE ? ORDER BY apellido ASC"
+        val cursor = db.rawQuery(query, arrayOf("$parcial%"))
+
+        cursor.use {
+            if (cursor.moveToFirst()) {
+                do {
+                    lista.add(
+                        NoSocio(
+                            id = it.getInt(it.getColumnIndexOrThrow("id_no_socio")),
+                            dni = it.getString(it.getColumnIndexOrThrow("dni")),
+                            nombre = it.getString(it.getColumnIndexOrThrow("nombre")),
+                            apellido = it.getString(it.getColumnIndexOrThrow("apellido")),
+                            telefono = "", direccion = "", email = "",
+                            aptoFisico = false, fechaAlta = ""
+                        )
+                    )
+                } while (cursor.moveToNext())
+            }
+        }
+        return lista
+    }
+
+    // Metodos para pagos
+
+    fun insertarPago(pago: Pago): Long {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("tipo_persona", pago.tipoPersona)
+            put("id_referencia", pago.idReferencia)
+            put("concepto", pago.concepto)
+            put("monto", pago.monto)
+            put("fecha_pago", pago.fechaPago)
+            put("fecha_vencimiento", pago.fechaVencimiento)
+            put("medio_pago", pago.medioPago)
+        }
+        return db.insert("pagos", null, values)
+    }
+
+    // Metodos para vencimientos
+
+    fun getVencimientosDelDia(fechaHoy: String): Cursor {
+        val db = readableDatabase
+        val query = """
+            SELECT s.nombre, s.apellido, s.dni, s.tipo_plan, s.id_socio FROM pagos p
+            JOIN socios s ON p.id_referencia = s.id_socio AND p.tipo_persona = 'socio'
+            WHERE p.fecha_vencimiento = ?
+            ORDER BY s.apellido, s.nombre
+        """
+        return db.rawQuery(query, arrayOf(fechaHoy))
+    }
+
 }
