@@ -17,7 +17,5 @@ class RegistrarSocioCorrectoActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-
     }
 }
