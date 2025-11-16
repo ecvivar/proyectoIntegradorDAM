@@ -67,7 +67,7 @@ class AsignarActividadNoSocio2 : AppCompatActivity() {
 
         val botonSiguiente = findViewById<MaterialButton>(R.id.btnSiguiente)
         botonSiguiente.setOnClickListener {
-            // 5. Pasar los datos al formulario de pago
+            // Pasar los datos al formulario de pago
             val intent = Intent(this, FormularioPagoActivity::class.java).apply {
                 putExtra("CLIENTE_ID", noSocioId)
                 putExtra("TIPO_CLIENTE", "no_socio")

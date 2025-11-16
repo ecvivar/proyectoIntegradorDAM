@@ -687,6 +687,7 @@ class DBHelper(context: Context) :
         }
         return noSocio
     }
+            }
 
     // Buscar No Socio por DNI
     fun buscarNoSocioPorDni(parcial: String): List<NoSocio> {
@@ -773,6 +774,7 @@ class DBHelper(context: Context) :
 
             fechaIteracion = fechaIteracion.plusMonths(1)
         }
+        return db.insert("pagos", null, values)
     }
 
     //Obtener Cuotas de un Socio
@@ -800,6 +802,31 @@ class DBHelper(context: Context) :
         }
         cursor.close()
         return lista
+    }
+
+
+    fun getPagosSocioPorDNI(dni: String): Cursor {
+        val db = readableDatabase
+        val query = """
+            SELECT p.concepto, p.monto, p.fecha_pago 
+            FROM pagos p
+            JOIN socios s ON p.id_referencia = s.id_socio AND p.tipo_persona = 'socio'
+            WHERE s.dni = ?
+            ORDER BY p.fecha_pago DESC
+        """
+        return db.rawQuery(query, arrayOf(dni))
+    }
+
+    fun getPagosNoSocioPorDNI(dni: String): Cursor {
+        val db = readableDatabase
+        val query = """
+            SELECT p.concepto, p.monto, p.fecha_pago 
+            FROM pagos p
+            JOIN no_socios ns ON p.id_referencia = ns.id_no_socio AND p.tipo_persona = 'no_socio'
+            WHERE ns.dni = ?
+            ORDER BY p.fecha_pago DESC
+        """
+        return db.rawQuery(query, arrayOf(dni))
     }
 
     // Marcar Cuota como Pagada
