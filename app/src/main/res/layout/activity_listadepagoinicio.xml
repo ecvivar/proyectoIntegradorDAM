@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/verde_fondo_app"
-    android:padding="16dp">
+    android:background="@color/verde_fondo_app">
 
-    <!-- Logo centrado arriba -->
+    <!-- LOGO SUPERIOR -->
     <ImageView
         android:id="@+id/logoClubDeportivo"
         android:layout_width="160dp"
@@ -16,95 +16,65 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Botón para volver atrás -->
+    <!-- BOTÓN VOLVER -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnBack"
+        android:id="@+id/btnVolver"
         style="@style/Widget.Material3.Button.ElevatedButton.Icon"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:text="LISTA DE PAGOS"
+        android:layout_marginTop="10dp"
+        android:text="VOLVER"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:backgroundTint="@color/verde_boton_app"
         app:shapeAppearance="@style/ShapeAppearance.App.Button.EsquinasPersonalizadas"
         app:icon="@drawable/arrow_back"
         app:iconTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/logoClubDeportivo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- BUSCAR DNI -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilBuscarDni"
+        style="@style/Widget.App.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="12dp"
+        android:hint="BUSCAR POR DOCUMENTO"
+        app:boxBackgroundColor="@color/white"
+        app:shapeAppearance="@style/ShapeAppearance.App.FormInput"
+        app:boxCornerRadiusTopStart="36dp"
+        app:boxCornerRadiusBottomStart="36dp"
+        app:boxCornerRadiusTopEnd="36dp"
+        app:boxCornerRadiusBottomEnd="36dp"
+        app:layout_constraintTop_toBottomOf="@id/btnVolver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtBuscarDni"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- LISTA DE CLIENTES -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvListaClientes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tilBuscarDni"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoClubDeportivo" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/searchCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:cardBackgroundColor="@color/verde_boton_app"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/btnBack"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:iconifiedByDefault="false"
-            app:queryHint="Ingrese documento..."/>
-
-    </androidx.cardview.widget.CardView>
-
-    <!-- Tarjeta con las opciones de Socio/No Socio -->
-    <LinearLayout
-        android:id="@+id/card_opciones"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="8dp"
-        android:background="#F0F0F0"
-        android:elevation="4dp"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/searchCard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:id="@+id/tv_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Presiona la opción deseada"
-            android:textColor="#333333"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_socio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:text="Socio"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/verde_boton_app" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_no_socio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No socio"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/verde_boton_app" />
-        </LinearLayout>
-    </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import java.sql.Blob
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 // ---------------------
 // 1. Data Classes
@@ -59,13 +60,38 @@ data class Pago(
     val medioPago: String
 )
 
-data class Vencimiento(
+data class Cuotas(
     val id: Int,
-    val idSocio: Int,
-    val fecha: String,
-    val estado: String
-)
+    val socioId: Int,
+    val mes: Int,
+    val anio: Int,
+    val pagado: Int
+) {
+    fun obtenerEstado(): EstadoCuotas {
+        if (pagado == 1) return EstadoCuotas.PAGADA
 
+        val hoy = LocalDate.now()
+        val fechaCuota = LocalDate.of(anio, mes, 1)
+        val vencimiento = fechaCuota.plusMonths(1)
+
+        return when {
+            vencimiento.isBefore(hoy) -> EstadoCuotas.VENCIDA
+            ChronoUnit.DAYS.between(hoy, vencimiento) <= 30 -> EstadoCuotas.PROXIMA
+            else -> EstadoCuotas.PENDIENTE
+        }
+    }
+}
+
+enum class EstadoCuotas {
+    PAGADA, VENCIDA, PROXIMA, PENDIENTE
+}
+
+data class ItemClientePago(
+    val id: Int,
+    val dni: String,
+    val nombreCompleto: String,
+    val tipoCliente: String, // "SOCIO" o "NO_SOCIO"
+)
 // ---------------------
 // 2. DBHelper
 // ---------------------
@@ -74,7 +100,7 @@ class DBHelper(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "club_freekoders.db"
-        private const val DATABASE_VERSION = 3 // incrementado
+        private const val DATABASE_VERSION = 5 // incrementado
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -141,6 +167,20 @@ class DBHelper(context: Context) :
         """
         )
 
+        // Tabla cuotas
+        db.execSQL(
+            """
+            CREATE TABLE cuotas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                socio_id INTEGER,
+                mes INTEGER,
+                anio INTEGER,
+                pagado INTEGER DEFAULT 0,
+                FOREIGN KEY(socio_id) REFERENCES socios(id)
+            )
+            """
+        )
+
         // Tabla actividades
         db.execSQL(
             """
@@ -152,10 +192,13 @@ class DBHelper(context: Context) :
             )
         """
         )
+
+        // Insertar los datos de prueba después de crear las tablas.
+        insertarDatosIniciales(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 2) {
+        if (oldVersion < 4) {
             db.execSQL("ALTER TABLE socios ADD COLUMN foto BLOB")
         }
         db.execSQL("DROP TABLE IF EXISTS usuarios")
@@ -164,6 +207,264 @@ class DBHelper(context: Context) :
         db.execSQL("DROP TABLE IF EXISTS pagos")
         db.execSQL("DROP TABLE IF EXISTS actividades")
         onCreate(db)
+    }
+
+    private fun insertarDatosIniciales(db: SQLiteDatabase) {
+        // Insertar socios
+        val socios = listOf(
+            Socio(
+                1,
+                "20123456",
+                "Juan",
+                "Pérez",
+                "1122334455",
+                "Calle 123",
+                "juan.perez@email.com",
+                "Básico",
+                true,
+                null,
+                "2024-01-15"
+            ),
+            Socio(
+                2,
+                "21234567",
+                "María",
+                "Gómez",
+                "1133445566",
+                "Av. Libertador 456",
+                "maria.gomez@email.com",
+                "Premium",
+                true,
+                null,
+                "2024-05-01"
+            ),
+            Socio(
+                3,
+                "22345678",
+                "Carlos",
+                "López",
+                "1144556677",
+                "Rivadavia 789",
+                "carlos.lopez@email.com",
+                "Básico",
+                false,
+                null,
+                "2024-10-20"
+            ),
+            Socio(
+                4,
+                "23456789",
+                "Ana",
+                "Rodríguez",
+                "1155667788",
+                "Sarmiento 101",
+                "ana.rodriguez@email.com",
+                "Intermedio",
+                true,
+                null,
+                "2024-07-05"
+            ),
+            Socio(
+                5,
+                "24567890",
+                "Pedro",
+                "Martínez",
+                "1166778899",
+                "Corrientes 202",
+                "pedro.martinez@email.com",
+                "Premium",
+                true,
+                null,
+                "2024-11-01"
+            ),
+            Socio(
+                6,
+                "25678901",
+                "Lucía",
+                "Fernández",
+                "1177889900",
+                "Belgrano 303",
+                "lucia.f@email.com",
+                "Intermedio",
+                true,
+                null,
+                "2025-01-28"
+            ),
+            Socio(
+                7,
+                "26789012",
+                "Jorge",
+                "Díaz",
+                "1188990011",
+                "San Martín 404",
+                "jorge.d@email.com",
+                "Básico",
+                false,
+                null,
+                "2025-03-10"
+            ),
+            Socio(
+                8,
+                "27890123",
+                "Sofía",
+                "Morales",
+                "1199001122",
+                "Alvear 505",
+                "sofia.m@email.com",
+                "Premium",
+                true,
+                null,
+                "2024-08-12"
+            ),
+            Socio(
+                9,
+                "28901234",
+                "Martín",
+                "Ruiz",
+                "1100112233",
+                "9 de Julio 606",
+                "martin.r@email.com",
+                "Básico",
+                true,
+                null,
+                "2025-04-01"
+            ),
+            Socio(
+                10,
+                "29012345",
+                "Elena",
+                "Castro",
+                "1122334400",
+                "Santa Fe 707",
+                "elena.c@email.com",
+                "Intermedio",
+                true,
+                null,
+                "2025-05-20"
+            )
+        )
+
+        for (socio in socios) {
+            val values = ContentValues().apply {
+                // No se inserta el ID porque es AUTOINCREMENT
+                put("dni", socio.dni)
+                put("nombre", socio.nombre)
+                put("apellido", socio.apellido)
+                put("telefono", socio.telefono)
+                put("direccion", socio.direccion)
+                put("email", socio.email)
+                put("tipo_plan", socio.tipoPlan)
+                put("apto_fisico", if (socio.aptoFisico) 1 else 0)
+                // Se usa null para la foto en datos de prueba
+                put("foto", socio.foto)
+                put("fecha_alta", socio.fechaAlta)
+            }
+            // Importante: usar db.insert en lugar del método insertarSocio() de la clase.
+            val idGenerado = db.insert("socios", null, values)
+
+            // Generar cuotas iniciales para el socio, usando el ID generado por SQLite
+            generarCuotasAutomaticas(db, idGenerado.toInt(), socio.fechaAlta)
+        }
+
+        // 3. Insertar No Socios
+        val noSocios = listOf(
+            NoSocio(
+                1,
+                "30123456",
+                "Gabriel",
+                "Torres",
+                "1112345678",
+                "Lavalle 111",
+                "gabriel.t@email.com",
+                true,
+                "2025-06-01"
+            ),
+            NoSocio(
+                2,
+                "31234567",
+                "Laura",
+                "Acosta",
+                "1123456789",
+                "Junín 222",
+                "laura.a@email.com",
+                true,
+                "2025-06-15"
+            ),
+            NoSocio(
+                3,
+                "32345678",
+                "Ricardo",
+                "Herrera",
+                "1134567890",
+                "Córdoba 333",
+                "ricardo.h@email.com",
+                false,
+                "2025-07-01"
+            ),
+            NoSocio(
+                4,
+                "33456789",
+                "Viviana",
+                "Luna",
+                "1145678901",
+                "Entre Ríos 444",
+                "viviana.l@email.com",
+                true,
+                "2025-07-20"
+            ),
+            NoSocio(
+                5,
+                "34567890",
+                "Andrés",
+                "Rojas",
+                "1156789012",
+                "Salta 555",
+                "andres.r@email.com",
+                true,
+                "2025-08-05"
+            )
+        )
+
+        for (noSocio in noSocios) {
+            val values = ContentValues().apply {
+                put("dni", noSocio.dni)
+                put("nombre", noSocio.nombre)
+                put("apellido", noSocio.apellido)
+                put("telefono", noSocio.telefono)
+                put("direccion", noSocio.direccion)
+                put("email", noSocio.email)
+                put("apto_fisico", if (noSocio.aptoFisico) 1 else 0)
+                put("fecha_alta", noSocio.fechaAlta)
+            }
+            db.insert("no_socios", null, values)
+        }
+    }
+
+    // ----------------------------------------------------
+    // MÉTODO GENERAR CUOTAS MODIFICADO PARA FUNCIONAR EN ONCREATE
+    // ----------------------------------------------------
+    // Este método usa la referencia a 'db' que le pasamos desde onCreate.
+    private fun generarCuotasAutomaticas(db: SQLiteDatabase, socioId: Int, fechaAlta: String) {
+        val fecha = LocalDate.parse(fechaAlta)
+        val hoy = LocalDate.now()
+
+        var fechaIteracion = LocalDate.of(fecha.year, fecha.month, 1)
+        val fin = LocalDate.of(hoy.year, hoy.month, 1).plusMonths(1)
+
+        while (!fechaIteracion.isAfter(fin)) {
+            val mes = fechaIteracion.monthValue
+            val anio = fechaIteracion.year
+
+            val values = ContentValues().apply {
+                put("socio_id", socioId)
+                put("mes", mes)
+                put("anio", anio)
+                put("pagado", 0)
+            }
+            db.insert("cuotas", null, values)
+
+            fechaIteracion = fechaIteracion.plusMonths(1)
+        }
     }
 
     // ---------------------
@@ -357,5 +658,154 @@ class DBHelper(context: Context) :
             }
         }
         return lista
+    }
+
+    // Obtener No Socio por ID
+    fun obtenerNoSocioPorId(id: Int): NoSocio? {
+        val db = readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT * FROM no_socios WHERE id_no_socio = ?",
+            arrayOf(id.toString())
+        )
+
+        var noSocio: NoSocio? = null
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                noSocio = NoSocio(
+                    id = it.getInt(it.getColumnIndexOrThrow("id_no_socio")),
+                    dni = it.getString(it.getColumnIndexOrThrow("dni")),
+                    nombre = it.getString(it.getColumnIndexOrThrow("nombre")),
+                    apellido = it.getString(it.getColumnIndexOrThrow("apellido")),
+                    telefono = it.getString(it.getColumnIndexOrThrow("telefono")),
+                    direccion = it.getString(it.getColumnIndexOrThrow("direccion")),
+                    email = it.getString(it.getColumnIndexOrThrow("email")),
+                    aptoFisico = it.getInt(it.getColumnIndexOrThrow("apto_fisico")) == 1,
+                    fechaAlta = it.getString(it.getColumnIndexOrThrow("fecha_alta"))
+                )
+            }
+        }
+        return noSocio
+    }
+
+    // Buscar No Socio por DNI
+    fun buscarNoSocioPorDni(parcial: String): List<NoSocio> {
+        val lista = mutableListOf<NoSocio>()
+        val db = readableDatabase
+
+        val cursor = db.rawQuery(
+            "SELECT * FROM no_socios WHERE dni LIKE ? ORDER BY apellido ASC",
+            arrayOf("%$parcial%")
+        )
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                do {
+                    lista.add(
+                        NoSocio(
+                            id = it.getInt(it.getColumnIndexOrThrow("id_no_socio")),
+                            dni = it.getString(it.getColumnIndexOrThrow("dni")),
+                            nombre = it.getString(it.getColumnIndexOrThrow("nombre")),
+                            apellido = it.getString(it.getColumnIndexOrThrow("apellido")),
+                            telefono = it.getString(it.getColumnIndexOrThrow("telefono")),
+                            direccion = it.getString(it.getColumnIndexOrThrow("direccion")),
+                            email = it.getString(it.getColumnIndexOrThrow("email")),
+                            aptoFisico = it.getInt(it.getColumnIndexOrThrow("apto_fisico")) == 1,
+                            fechaAlta = it.getString(it.getColumnIndexOrThrow("fecha_alta"))
+                        )
+                    )
+                } while (it.moveToNext())
+            }
+        }
+        return lista
+    }
+
+    // Obtener todos los No Socios
+    fun obtenerTodosLosNoSocios(): List<NoSocio> {
+        val lista = mutableListOf<NoSocio>()
+        val db = readableDatabase
+
+        val cursor = db.rawQuery("SELECT * FROM no_socios ORDER BY apellido ASC", null)
+
+        cursor.use {
+            if (it.moveToFirst()) {
+                do {
+                    lista.add(
+                        NoSocio(
+                            id = it.getInt(it.getColumnIndexOrThrow("id_no_socio")),
+                            dni = it.getString(it.getColumnIndexOrThrow("dni")),
+                            nombre = it.getString(it.getColumnIndexOrThrow("nombre")),
+                            apellido = it.getString(it.getColumnIndexOrThrow("apellido")),
+                            telefono = it.getString(it.getColumnIndexOrThrow("telefono")),
+                            direccion = it.getString(it.getColumnIndexOrThrow("direccion")),
+                            email = it.getString(it.getColumnIndexOrThrow("email")),
+                            aptoFisico = it.getInt(it.getColumnIndexOrThrow("apto_fisico")) == 1,
+                            fechaAlta = it.getString(it.getColumnIndexOrThrow("fecha_alta"))
+                        )
+                    )
+                } while (it.moveToNext())
+            }
+        }
+        return lista
+    }
+
+    // Generar Cuotas
+    fun generarCuotasAutomaticas(socioId: Int, fechaAlta: String) {
+        val db = writableDatabase
+
+        val fecha = LocalDate.parse(fechaAlta)
+        val hoy = LocalDate.now()
+
+        var fechaIteracion = LocalDate.of(fecha.year, fecha.month, 1)
+        val fin = LocalDate.of(hoy.year, hoy.month, 1).plusMonths(1)
+
+        while (!fechaIteracion.isAfter(fin)) {
+            val mes = fechaIteracion.monthValue
+            val anio = fechaIteracion.year
+
+            val values = ContentValues().apply {
+                put("socio_id", socioId)
+                put("mes", mes)
+                put("anio", anio)
+                put("pagado", 0)
+            }
+            db.insert("cuotas", null, values)
+
+            fechaIteracion = fechaIteracion.plusMonths(1)
+        }
+    }
+
+    //Obtener Cuotas de un Socio
+    fun obtenerCuotasSocio(socioId: Int): List<Cuotas> {
+        val db = readableDatabase
+        val lista = mutableListOf<Cuotas>()
+
+        val cursor = db.rawQuery(
+            "SELECT * FROM cuotas WHERE socio_id=? ORDER BY anio DESC, mes DESC",
+            arrayOf(socioId.toString())
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                lista.add(
+                    Cuotas(
+                        id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        socioId = socioId,
+                        mes = cursor.getInt(cursor.getColumnIndexOrThrow("mes")),
+                        anio = cursor.getInt(cursor.getColumnIndexOrThrow("anio")),
+                        pagado = cursor.getInt(cursor.getColumnIndexOrThrow("pagado"))
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return lista
+    }
+
+    // Marcar Cuota como Pagada
+    fun marcarPagada(idCuota: Int) {
+        val db = writableDatabase
+        val values = ContentValues().apply { put("pagado", 1) }
+        db.update("cuotas", values, "id=?", arrayOf(idCuota.toString()))
     }
 }
