@@ -2,10 +2,12 @@ package com.example.proyectointegradorfreekoders.database
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+
 
 // ---------------------
 // 1. Data Classes
@@ -527,6 +529,126 @@ class DBHelper(context: Context) :
         return db.insert("no_socios", null, values)
     }
 
+    /**
+     * Inserta un nuevo registro de pago y, si corresponde, marca una o varias
+     * cuotas como pagadas.
+     *
+     * @param pago El objeto Pago que contiene la información a guardar.
+     * @param idsCuotasAsociadas (Opcional) Una lista de IDs de la tabla 'cuotas'
+     *                           que este pago está saldando.
+     * @return El ID de la nueva fila de pago insertada, o -1 si ocurrió un error.
+     */
+    fun insertarPago(pago: Pago, idsCuotasAsociadas: List<Int>? = null): Long {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("tipo_persona", pago.tipoPersona)
+            put("id_referencia", pago.idReferencia)
+            put("concepto", pago.concepto)
+            put("monto", pago.monto)
+            put("fecha_pago", pago.fechaPago)
+            put("medio_pago", pago.medioPago)
+        }
+
+        var resultado: Long = -1
+        try {
+            db.beginTransaction()
+
+            // 1. Insertar el registro en la tabla 'pagos'
+            resultado = db.insert("pagos", null, values)
+
+            // 2. Si el pago fue exitoso Y está asociado a una o varias cuotas...
+            if (resultado != -1L && !idsCuotasAsociadas.isNullOrEmpty()) {
+                // ...marcar CADA cuota de la lista como pagada.
+                idsCuotasAsociadas.forEach { idCuota ->
+                    val valoresCuota = ContentValues().apply { put("pagado", 1) }
+                    db.update("cuotas", valoresCuota, "id=?", arrayOf(idCuota.toString()))
+                }
+            }
+
+            // 3. Si todo salió bien, confirmar la transacción
+            db.setTransactionSuccessful()
+
+        } catch (e: Exception) {
+            // Si algo falla, puedes registrar el error
+            // e.printStackTrace()
+            resultado = -1
+        } finally {
+            // 4. Finalizar la transacción
+            db.endTransaction()
+        }
+        return resultado
+    }
+
+
+
+    /**
+     * Busca en la base de datos las cuotas que vencen en el día de hoy.
+     * En tu modelo, esto se traduce a buscar las cuotas del mes anterior
+     * que aún no están pagadas, ya que el vencimiento es a fin de mes.
+     *
+     * @param anio El año actual.
+     * @param mes El mes actual.
+     * @return Un Cursor que contiene los socios con cuotas vencidas este mes.
+     */
+    fun getVencimientosDelDia(anio: Int, mes: Int): Cursor {
+        val db = this.readableDatabase
+
+        // Calculamos el mes y año anterior
+        var mesAnterior = mes - 1
+        var anioDeMesAnterior = anio
+        if (mesAnterior == 0) {
+            mesAnterior = 12
+            anioDeMesAnterior = anio - 1
+        }
+
+        // Define la consulta SQL para seleccionar socios con cuotas vencidas
+        val query = """
+        SELECT s.nombre, s.apellido, s.dni
+        FROM socios s
+        JOIN cuotas c ON s.id_socio = c.socio_id
+        WHERE c.anio = ? AND c.mes = ? AND c.pagado = 0
+    """
+        // Ejecuta la consulta y devuelve el Cursor con los resultados
+        return db.rawQuery(query, arrayOf(anioDeMesAnterior.toString(), mesAnterior.toString()))
+    }
+
+    // Pega esto dentro de tu clase DBHelper.kt
+
+    /**
+     * Obtiene una lista de socios que tienen al menos una cuota vencida.
+     * Una cuota se considera vencida si es de un mes anterior al actual y no está pagada.
+     *
+     * @param anioActual El año actual.
+     * @param mesActual El mes actual.
+     * @return Un Cursor con el DNI, nombre y apellido de los socios con deudas.
+     */
+    fun getSociosConCuotasVencidas(anioActual: Int, mesActual: Int): Cursor {
+        val db = this.readableDatabase
+
+        // Creamos una representación numérica de la fecha actual para comparar fácilmente.
+        // Ejemplo: Noviembre 2025 -> 202511
+        val fechaNumericaActual = anioActual * 100 + mesActual
+
+        // Consulta para encontrar socios con cuotas de meses anteriores sin pagar.
+        val query = """
+        SELECT DISTINCT
+            s.id_socio, s.dni, s.nombre, s.apellido
+        FROM 
+            socios s
+        JOIN 
+            cuotas c ON s.id_socio = c.socio_id
+        WHERE 
+            (c.anio * 100 + c.mes) < ? AND c.pagado = 0
+        ORDER BY 
+            s.apellido, s.nombre
+    """
+        // El DISTINCT es clave para que un socio no aparezca repetido si debe varios meses.
+
+        return db.rawQuery(query, arrayOf(fechaNumericaActual.toString()))
+    }
+
+
+
     // Obtener Socios
     fun obtenerSocioPorId(id: Int): Socio? {
         val db = readableDatabase
@@ -687,7 +809,7 @@ class DBHelper(context: Context) :
         }
         return noSocio
     }
-            }
+           // }
 
     // Buscar No Socio por DNI
     fun buscarNoSocioPorDni(parcial: String): List<NoSocio> {
@@ -774,7 +896,7 @@ class DBHelper(context: Context) :
 
             fechaIteracion = fechaIteracion.plusMonths(1)
         }
-        return db.insert("pagos", null, values)
+       // return db.insert("pagos", null, values)
     }
 
     //Obtener Cuotas de un Socio

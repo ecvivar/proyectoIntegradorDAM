@@ -3,17 +3,13 @@ package com.example.proyectointegradorfreekoders
 import android.os.Bundle
 import android.widget.EditText
 import android.content.Intent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.widget.addTextChangedListener
-import com.example.proyectointegradorfreekoders.adapters.SocioAdapter
+import com.example.proyectointegradorfreekoders.database.SocioAdapter
 
 import com.example.proyectointegradorfreekoders.database.DBHelper
-import com.example.proyectointegradorfreekoders.database.Socio
 import com.google.android.material.button.MaterialButton
 
 class BuscarSocioImprimirActivity : AppCompatActivity() {

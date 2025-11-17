@@ -1,97 +1,159 @@
 package com.example.proyectointegradorfreekoders
 
+import android.content.Context
+import android.database.Cursor
+import android.graphics.pdf.PdfDocument
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.os.CancellationSignal
+import android.os.ParcelFileDescriptor
+import android.print.PageRange
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintDocumentInfo
+import android.print.PrintManager
+import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.proyectointegradorfreekoders.adapters.VencimientoAdapter
 import com.example.proyectointegradorfreekoders.database.DBHelper
+import com.example.proyectointegradorfreekoders.database.SocioConDeuda
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.Calendar
 
 class ListarVencimientosActivity : AppCompatActivity() {
 
     private lateinit var db: DBHelper
+    private lateinit var rvVencimientos: RecyclerView
+    private lateinit var layoutParaImprimir: View // Variable para guardar la vista a imprimir
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listarvencimientos)
 
-        // Inicializar el DBHelper para poder usar la base de datos
+        // Inicialización de componentes
         db = DBHelper(this)
+        rvVencimientos = findViewById(R.id.rvVencimientos)
+        layoutParaImprimir = findViewById(R.id.layout_para_imprimir) // Asignamos la vista
+        rvVencimientos.layoutManager = LinearLayoutManager(this)
 
-        // Obtener la fecha de hoy en el formato que usa la base de datos (ej: "2025-11-15")
-        val fechaHoy = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-
-        // Llamar a la función que busca en la BD y muestra los datos en pantalla
-        cargarVencimientosDelDia(fechaHoy)
-
-
-        // botón volver
-        val botonVolver = findViewById<MaterialButton>(R.id.btnVolver)
-        botonVolver.setOnClickListener {
-            finish()
+        // Configurar botones
+        findViewById<MaterialButton>(R.id.btnVolver).setOnClickListener { finish() }
+        findViewById<Button>(R.id.btnImprimir).setOnClickListener {
+            // Pasamos el contexto y la vista que queremos imprimir
+            imprimirLista(this, layoutParaImprimir)
         }
 
-        //  botón IMPRIMIR PDF
-        val botonImprimir = findViewById<Button>(R.id.imprimir)
-        botonImprimir.setOnClickListener {
-            Toast.makeText(this, "Imprimiendo la lista de vencimientos", Toast.LENGTH_SHORT).show()
-        }
+        // Cargar los datos en la lista
+        cargarVencimientos()
     }
 
-    /**
-     * Busca en la base de datos los socios con vencimiento en la fecha dada
-     * y los muestra en el layout dinámicamente.
-     */
-    private fun cargarVencimientosDelDia(fechaHoy: String) {
-        // Encontrar el LinearLayout que preparamos en el XML
-        val layoutLista = findViewById<LinearLayout>(R.id.layout_lista_vencimientos)
-        // Limpiar la lista por si tuviera algo de antes
-        layoutLista.removeAllViews()
+    private fun cargarVencimientos() {val calendario = Calendar.getInstance()
+        val anioActual = calendario.get(Calendar.YEAR)
+        val mesActual = calendario.get(Calendar.MONTH) + 1
 
-        // Llamar a la función del DBHelper que hace la consulta a la BD
-        val cursor = db.getVencimientosDelDia(fechaHoy)
+        // 1. Obtenemos el cursor desde la base de datos.
+        val cursor: Cursor = db.getSociosConCuotasVencidas(anioActual, mesActual)
 
-        // Verificar si la consulta no devolvió ningún socio
-        if (cursor.count == 0) {
-            // Si no hay vencimientos, mostrar un mensaje informativo
-            val tvMensaje = TextView(this)
-            tvMensaje.text = "No hay vencimientos para el día de hoy."
-            tvMensaje.textSize = 18f
-            tvMensaje.setPadding(16, 16, 16, 16)
-            layoutLista.addView(tvMensaje)
-            cursor.close() // ¡Importante cerrar el cursor!
-            return
-        }
+        // 2. Creamos la lista que vamos a rellenar.
+        val sociosConDeuda = mutableListOf<SocioConDeuda>()
 
-        // Si la consulta SÍ devolvió socios, los recorremos uno por uno
-        cursor.use { // 'use' se encarga de cerrar el cursor al finalizar
-            while (it.moveToNext()) {
-                // Para cada socio, obtenemos sus datos
-                val nombre = it.getString(it.getColumnIndexOrThrow("nombre"))
-                val apellido = it.getString(it.getColumnIndexOrThrow("apellido"))
-                val dni = it.getString(it.getColumnIndexOrThrow("dni"))
-                // val tipoPlan = it.getString(it.getColumnIndexOrThrow("tipo_plan"))
+        // 3. Verificamos que el cursor no sea nulo y que tenga datos.
+        if (cursor.moveToFirst()) {
+            try {
+                // 4. Obtenemos los índices de las columnas UNA SOLA VEZ antes del bucle.
+                val nombreIndex = cursor.getColumnIndexOrThrow("nombre")
+                val apellidoIndex = cursor.getColumnIndexOrThrow("apellido")
+                val dniIndex = cursor.getColumnIndexOrThrow("dni")
 
-                val tvSocio = TextView(this)
-                val inicial = nombre.firstOrNull()?.uppercaseChar() ?: '?'
-                tvSocio.text = "• ${apellido.uppercase()}, ${nombre.uppercase()} (DNI: $dni)"
-                tvSocio.textSize = 18f
-                tvSocio.setPadding(8, 16, 8, 16)
-                // Añadir la vista del socio al LinearLayout
-                layoutLista.addView(tvSocio)
+                // 5. Recorremos el cursor con un bucle do-while.
+                do {
+                    val socio = SocioConDeuda(
+                        nombre = cursor.getString(nombreIndex),
+                        apellido = cursor.getString(apellidoIndex),
+                        dni = cursor.getString(dniIndex)
+                    )
+                    sociosConDeuda.add(socio)
+                } while (cursor.moveToNext())
 
-                // Añadir una línea divisoria
-                val separador = TextView(this)
-                separador.height = 1
-                separador.setBackgroundColor(getColor(R.color.verde_oscuro))
-                layoutLista.addView(separador)
+            } finally {
+                // 6. ¡MUY IMPORTANTE! Cerramos el cursor para liberar recursos.
+                cursor.close()
             }
         }
+
+        // 7. Creamos y asignamos el adaptador al RecyclerView.
+        val adapter = VencimientoAdapter(sociosConDeuda)
+        rvVencimientos.adapter = adapter
+    }
+
+
+    private fun imprimirLista(context: Context, view: View) {
+        val printManager = context.getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val jobName = "${context.getString(R.string.app_name)} - Reporte de Vencimientos"
+
+        // Creamos un adaptador de impresión personalizado
+        val printAdapter = object : PrintDocumentAdapter() {
+
+            override fun onLayout(
+                oldAttributes: PrintAttributes?,
+                newAttributes: PrintAttributes,
+                cancellationSignal: CancellationSignal?,
+                callback: LayoutResultCallback,
+                extras: Bundle?
+            ) {
+                if (cancellationSignal?.isCanceled == true) {
+                    callback.onLayoutCancelled()
+                    return
+                }
+                // Definimos la información del documento (1 página en este caso)
+                val info = PrintDocumentInfo.Builder(jobName)
+                    .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
+                    .setPageCount(1)
+                    .build()
+
+                callback.onLayoutFinished(info, true)
+            }
+
+            override fun onWrite(
+                pages: Array<out PageRange>?,
+                destination: ParcelFileDescriptor,
+                cancellationSignal: CancellationSignal?,
+                callback: WriteResultCallback
+            ) {
+                if (cancellationSignal?.isCanceled == true) {
+                    callback.onWriteCancelled()
+                    return
+                }
+
+                val document = PdfDocument()
+                val pageInfo = PdfDocument.PageInfo.Builder(view.width, view.height, 1).create()
+                val page = document.startPage(pageInfo)
+
+                // Dibujamos el contenido de la vista en el lienzo (Canvas) de la página PDF
+                view.draw(page.canvas)
+                document.finishPage(page)
+
+                try {
+                    FileOutputStream(destination.fileDescriptor).use {
+                        document.writeTo(it)
+                    }
+                } catch (e: IOException) {
+                    callback.onWriteFailed(e.toString())
+                    return
+                } finally {
+                    document.close()
+                }
+
+                callback.onWriteFinished(arrayOf(PageRange.ALL_PAGES))
+            }
+        }
+
+        printManager.print(jobName, printAdapter, PrintAttributes.Builder().build())
+        Toast.makeText(context, "Preparando para imprimir...", Toast.LENGTH_SHORT).show()
     }
 }

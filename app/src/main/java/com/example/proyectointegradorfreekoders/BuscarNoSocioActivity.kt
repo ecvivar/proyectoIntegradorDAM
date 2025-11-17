@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.proyectointegradorfreekoders.NoSocioAdapter
 import com.example.proyectointegradorfreekoders.database.DBHelper
 import com.google.android.material.button.MaterialButton
 

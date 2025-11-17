@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:LinearLayoutandroid="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/verde_fondo_app"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ListarVencimientosActivity">
 
     <ImageView
         android:id="@+id/iv_logo"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="Logo Freekoders"
+        android:contentDescription="Logo Club"
         android:src="@drawable/logoclub" />
 
     <com.google.android.material.button.MaterialButton
@@ -22,279 +24,48 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:text="VENCIMIENTOS"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:backgroundTint="@color/verde_boton_app"
-        app:shapeAppearance="@style/ShapeAppearance.App.Button.EsquinasPersonalizadas"
         app:icon="@drawable/arrow_back"
         app:iconTint="@color/white" />
 
-    <LinearLayout
-        android:id="@+id/layout_lista_vencimientos"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="#FFF1F8E9"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <!-- Fila 1: Camila Torres -->
-        <LinearLayout
+    <!-- ESTE ES EL LAYOUT QUE SE VA A IMPRIMIR COMO PDF -->
+    <LinearLayout
+        android:id="@+id/layout_para_imprimir"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvVencimientos"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <!-- CÍRCULO CON INICIAL -->
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/circle_background"
-                android:gravity="center"
-                android:text="C"
-                android:textColor="@color/verde_boton_app"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- DATOS DE LA PERSONA -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Camila Torres"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="36.584.921"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:background="#FFDCEDC8" />
-
-        <!-- Fila 2: Lucas Fernandez -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <!-- CÍRCULO CON INICIAL -->
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/circle_background"
-                android:gravity="center"
-                android:text="L"
-                android:textColor="@color/verde_boton_app"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- DATOS DE LA PERSONA -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lucas Fernandez"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="39.579.265"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:background="#FFDCEDC8" />
-
-        <!-- Fila 3: Sofia Rivas -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <!-- CÍRCULO CON INICIAL -->
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/circle_background"
-                android:gravity="center"
-                android:text="S"
-                android:textColor="@color/verde_boton_app"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- DATOS DE LA PERSONA -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sofia Rivas"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="37.236.953"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:background="#FFDCEDC8" />
-
-        <!-- Fila 4: Martina Suarez -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <!-- CÍRCULO CON INICIAL -->
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/circle_background"
-                android:gravity="center"
-                android:text="M"
-                android:textColor="@color/verde_boton_app"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- DATOS DE LA PERSONA -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Martina Suarez"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="25.375.129"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:background="#FFDCEDC8" />
-
-        <!-- Fila 5: Agustina Lopez -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <!-- CÍRCULO CON INICIAL -->
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/circle_background"
-                android:gravity="center"
-                android:text="A"
-                android:textColor="@color/verde_boton_app"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- DATOS DE LA PERSONA -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Agustina Lopez"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="31.692.793"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="match_parent"
+            tools:listitem="@layout/list_item_vencimiento" />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/imprimir"
+        android:id="@+id/btnImprimir"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/verde_boton_app"
-        android:minHeight="48dp"
         android:text="IMPRIMIR PDF"
         android:textColor="@android:color/white"
         android:textSize="16sp"

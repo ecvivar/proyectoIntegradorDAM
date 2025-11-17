@@ -1,4 +1,4 @@
-package com.example.proyectointegradorfreekoders.adapters
+package com.example.proyectointegradorfreekoders.database
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyectointegradorfreekoders.R
-import com.example.proyectointegradorfreekoders.database.Socio
 
 class SocioAdapter(
     private var lista: MutableList<Socio>,

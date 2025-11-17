@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Usamos el color verde de tu app para el fondo de la etiqueta -->
+    <solid android:color="@color/verde_boton_app" />
+
+    <!-- Hacemos las esquinas muy redondeadas para que parezca una "píldora" -->
+    <corners android:radius="16dp" />
+
+</shape>

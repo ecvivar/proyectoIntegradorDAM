@@ -71,47 +71,49 @@ class FormularioPagoActivity : AppCompatActivity() {
         radioTarjeta.setOnCheckedChangeListener { _, _ -> actualizarEstadoSpinner() }
 
         //  botón Pagar
+        //  botón Pagar
         botonPagar.setOnClickListener {
-            //Obtener la fecha actual y el medio de pago
+            // 1. Obtener los datos del formulario
             val fechaDePago = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-            val medioDePago = if (radioEfectivo.isChecked) "Efectivo" else "Tarjeta"
+            val medioDePago = if (radioEfectivo.isChecked) "Efectivo" else {
+                // Si no es efectivo, también guardamos la cantidad de cuotas seleccionada
+                "Tarjeta - ${spinnerCuotas.selectedItem}"
+            }
 
-            //Crear el objeto Pago con todos los datos
+            // 2. Crear el objeto Pago
             val nuevoPago = Pago(
-                id = 0, // El ID es autoincremental en la BD
-                tipoPersona = tipoCliente, // "socio" o "no_socio"
-                idReferencia = clienteId, // El ID de la persona que paga
-                concepto = concepto, // "Cuota mensual" o "Acrobacias Aéreas, Fútbol", etc.
+                id = 0,
+                tipoPersona = tipoCliente,
+                idReferencia = clienteId,
+                concepto = concepto,
                 monto = montoAPagar,
                 fechaPago = fechaDePago,
-                fechaVencimiento = "", // Para este pago, la fecha de vencimiento no aplica.
                 medioPago = medioDePago
             )
 
-            //Insertar en la base de datos
-            val resultado = db.insertarPago(nuevoPago)
+            // 3. ¡LA PARTE MÁS IMPORTANTE! Recuperar los IDs de las cuotas desde el Intent
+            val idsCuotasAPagar: List<Int>? = intent.getIntegerArrayListExtra("IDS_CUOTAS")
 
-            //Verificar si el guardado fue exitoso
+            // 4. Insertar el pago y ACTUALIZAR las cuotas en la base de datos
+            //    Llamamos a la versión de `insertarPago` que acepta la lista de IDs
+            val resultado = db.insertarPago(nuevoPago, idsCuotasAPagar)
+
+            // 5. Verificar el resultado y navegar a la pantalla de éxito
             if (resultado != -1L) {
-                // ÉXITO: El pago se guardó correctamente.
+                // ÉXITO: El pago se guardó y las cuotas se actualizaron.
                 var mensaje = "Pago realizado con éxito:\n\nMonto: $${String.format("%.2f", montoAPagar)}\nConcepto: $concepto\nForma de pago: $medioDePago"
-
-                if (medioDePago == "Tarjeta") {
-                    val cuotasSeleccionadas = spinnerCuotas.selectedItem.toString()
-                    mensaje += "\nCuotas: $cuotasSeleccionadas"
-                }
 
                 val intent = Intent(this, PagoCorrectoActivity::class.java)
                 intent.putExtra("MENSAJE_PAGO", mensaje)
                 startActivity(intent)
-                finish() // Cierra esta pantalla para que el usuario no pueda volver con el botón "atrás"
+                finish() // Cierra esta pantalla
 
             } else {
                 // ERROR: El pago no se pudo guardar.
                 Toast.makeText(this, "Error al registrar el pago en la base de datos", Toast.LENGTH_LONG).show()
             }
-
         }
+
     }
 
     private fun actualizarEstadoSpinner() {

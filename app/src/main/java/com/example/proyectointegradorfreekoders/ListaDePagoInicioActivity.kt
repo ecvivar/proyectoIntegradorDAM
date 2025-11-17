@@ -12,6 +12,7 @@ import com.example.proyectointegradorfreekoders.adapters.ListaPagoAdapter
 import com.example.proyectointegradorfreekoders.database.DBHelper
 import com.example.proyectointegradorfreekoders.database.Socio
 import com.example.proyectointegradorfreekoders.database.NoSocio
+import com.example.proyectointegradorfreekoders.database.ItemClientePago
 import com.google.android.material.button.MaterialButton
 
 class ListaDePagoInicioActivity : AppCompatActivity() {
@@ -105,13 +106,25 @@ class ListaDePagoInicioActivity : AppCompatActivity() {
         return lista.sortedBy { it.nombreCompleto.uppercase() }
     }
 
-    // Abre la actividad de detalle del cliente
+    // Abre la actividad de detalle del cliente según su tipo
     private fun abrirDetalleCliente(cliente: ItemClientePago) {
-        val intent = Intent(this, ListaDePagoSocioActivity::class.java)
-        intent.putExtra("ID_CLIENTE", cliente.id)
-        intent.putExtra("DNI_CLIENTE", cliente.dni)
-        intent.putExtra("NOMBRE_CLIENTE", cliente.nombreCompleto)
-        intent.putExtra("TIPO_CLIENTE", cliente.tipoCliente)
-        startActivity(intent)
+        // Verificamos el tipo de cliente para decidir a qué pantalla navegar
+        if (cliente.tipoCliente == "SOCIO") {
+            // --- FLUJO PARA SOCIOS (el que ya tenías y funcionaba) ---
+            // Creamos un Intent para ir a la pantalla de pago de cuotas del socio.
+            val intent = Intent(this, ListaDePagoSocioActivity::class.java)
+            // Pasamos el ID del socio.
+            intent.putExtra("SOCIO_ID", cliente.id)
+            startActivity(intent)
+
+        } else if (cliente.tipoCliente == "NO_SOCIO") {
+            // --- ¡NUEVO FLUJO PARA NO SOCIOS! ---
+            // Creamos un Intent para ir a la pantalla del historial de pagos.
+            val intent = Intent(this, ListaDePagoNoSocioActivity::class.java)
+            // Pasamos el ID del no socio para que la pantalla de destino sepa qué historial mostrar.
+            intent.putExtra("NO_SOCIO_ID", cliente.id)
+            startActivity(intent)
+        }
     }
+
 }

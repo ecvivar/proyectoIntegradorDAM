@@ -2,102 +2,135 @@ package com.example.proyectointegradorfreekoders
 
 import android.content.Intent
 import android.os.Bundle
-<<<<<<< HEAD
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.proyectointegradorfreekoders.databinding.ActivityListadepagosocioBinding
+import com.example.proyectointegradorfreekoders.adapters.CuotaAdapter
+import com.example.proyectointegradorfreekoders.database.Cuotas
 import com.example.proyectointegradorfreekoders.database.DBHelper
-import com.example.proyectointegradorfreekoders.CuotaAdapter
+import com.example.proyectointegradorfreekoders.databinding.ActivityListadepagosocioBinding
+import java.io.Serializable
 
 class ListaDePagoSocioActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListadepagosocioBinding
     private lateinit var db: DBHelper
+    private lateinit var adapter: CuotaAdapter
 
-    private var socioId = 0
+    private var socioId = -1
     private var nombreSocio = ""
     private var dniSocio = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityListadepagosocioBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         db = DBHelper(this)
 
-        // Recibir datos del socio
-        socioId = intent.getIntExtra("ID_CLIENTE", 0)
-        nombreSocio = intent.getStringExtra("NOMBRE_CLIENTE") ?: ""
-        dniSocio = intent.getStringExtra("DNI_CLIENTE") ?: ""
+        recibirDatos()
+        if (socioId == -1) {
+            finish()
+            return
+        }
 
-        binding.txtNombreSocio.text = "$nombreSocio - DNI $dniSocio"
+        configurarVistas()
+        setupRecyclerView()
+        configurarListeners()
+        cargarCuotas()
+    }
 
-        // Botón volver
+    override fun onResume() {
+        super.onResume()
+        if (::db.isInitialized) {
+            cargarCuotas()
+        }
+    }
+
+    private fun recibirDatos() {
+        // Corregimos la clave para que coincida con la que envía ListaPagoInicioActivity
+        socioId = intent.getIntExtra("SOCIO_ID", -1)
+
+        // Si el ID es válido, obtenemos los datos frescos desde la base de datos
+        // para evitar inconsistencias o datos desactualizados.
+        if (socioId != -1) {
+            val socio = db.obtenerSocioPorId(socioId)
+            if (socio != null) {
+                nombreSocio = "${socio.nombre} ${socio.apellido}"
+                dniSocio = socio.dni
+            } else {
+                // Si el ID es inválido, mostramos un error y preparamos para cerrar.
+                Toast.makeText(this, "Error: Socio no encontrado en la base de datos.", Toast.LENGTH_LONG).show()
+                socioId = -1 // Forzamos a -1 para que la lógica de onCreate cierre la actividad
+            }
+        }
+    }
+
+
+    private fun configurarVistas() {
+        binding.txtNombreSocio.text = "$nombreSocio - DNI: $dniSocio"
+    }
+
+    private fun setupRecyclerView() {
+        // Inicializa el adaptador con una lista vacía.
+        // La lógica de clic del checkbox ahora está dentro del propio adaptador.
+        adapter = CuotaAdapter(mutableListOf())
+        binding.rvCuotas.layoutManager = LinearLayoutManager(this)
+        binding.rvCuotas.adapter = adapter
+    }
+
+    private fun configurarListeners() {
+        // Configura el botón para volver a la pantalla anterior
         binding.btnVolver.setOnClickListener { finish() }
 
-        // Botón siguiente
+        // --- ¡LÓGICA DEL BOTÓN SIGUIENTE! ---
         binding.btnSiguiente.setOnClickListener {
-            val intent = Intent(this, FormularioPagoActivity::class.java)
-            intent.putExtra("socioId", socioId)
-            startActivity(intent)
-        }
+            // 1. Obtener la lista de cuotas seleccionadas desde el adaptador
+            val cuotasSeleccionadas = adapter.obtenerCuotasSeleccionadas()
 
-        // Cargar cuotas
-        val cuotas = db.obtenerCuotasSocio(socioId)
-        binding.rvCuotas.layoutManager = LinearLayoutManager(this)
-        binding.rvCuotas.adapter = CuotaAdapter(this, cuotas) { cuota, checked ->
-            if (checked) db.marcarPagada(cuota.id)
-=======
-import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.proyectointegradorfreekoders.adapters.SocioAdapter
-import com.example.proyectointegradorfreekoders.database.DBHelper
-import com.google.android.material.button.MaterialButton
+            // 2. Validar si se seleccionó al menos una cuota
+            if (cuotasSeleccionadas.isEmpty()) {
+                Toast.makeText(this, "Por favor, seleccione al menos una cuota para pagar", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-class ListaDePagoSocioActivity : AppCompatActivity() {
+            // 3. Calcular el monto total y construir el concepto
+            var montoTotal = 0.0
+            val conceptos = mutableListOf<String>()
+            val idsCuotas = mutableListOf<Int>()
 
-    private lateinit var db: DBHelper
-    private lateinit var adapter: SocioAdapter
+            cuotasSeleccionadas.forEach { cuota ->
+                montoTotal += obtenerMontoPlan(socioId) // Suma el monto de cada cuota
+                conceptos.add("${cuota.mes}/${cuota.anio}") // Añade "mes/año" a la lista de conceptos
+                idsCuotas.add(cuota.id) // Guarda el ID de la cuota
+            }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_buscar_socio_imprimir)
-
-        db = DBHelper(this)
-
-        val rv = findViewById<RecyclerView>(R.id.rvSocios)
-        val txtBuscar = findViewById<EditText>(R.id.txtBuscar)
-        val botonVolver = findViewById<MaterialButton>(R.id.btnVolver)
-
-        botonVolver.setOnClickListener {
-            finish()
-        }
-
-        adapter = SocioAdapter(
-            db.obtenerTodosLosSocios().toMutableList()
-        ) { socio ->
-            // cobrar cuota
+            // 4. Crear el intent para ir al formulario de pago
             val intent = Intent(this, FormularioPagoActivity::class.java).apply {
-                putExtra("CLIENTE_ID", socio.id)
-                putExtra("TIPO_CLIENTE", "socio")
-                putExtra("CONCEPTO", "Cuota Mensual - ${socio.tipoPlan}")
-                putExtra("MONTO_A_PAGAR", 15000.0)
+                putExtra("CLIENTE_ID", socioId)
+                putExtra("TIPO_CLIENTE", "SOCIO")
+                putExtra("CONCEPTO", "Pago Cuotas: ${conceptos.joinToString(", ")}")
+                putExtra("MONTO_A_PAGAR", montoTotal)
+                // Se pasan los IDs de las cuotas para marcarlas como pagadas después
+                putExtra("IDS_CUOTAS", idsCuotas as Serializable)
             }
             startActivity(intent)
         }
+    }
 
-        rv.layoutManager = LinearLayoutManager(this)
-        rv.adapter = adapter
+    private fun cargarCuotas() {
+        val listaDeCuotas = db.obtenerCuotasSocio(socioId)
+        adapter.updateList(listaDeCuotas.filter { it.pagado == 0 }) // Mostramos solo las no pagadas
+    }
 
-        txtBuscar.addTextChangedListener { editable ->
-            val filtro = editable?.toString().orEmpty()
-            val resultados = db.buscarSocioPorDni(filtro)
-            adapter.updateList(resultados)
->>>>>>> diego-e4
+    private fun obtenerMontoPlan(socioId: Int): Double {
+        val socio = db.obtenerSocioPorId(socioId)
+        return when (socio?.tipoPlan) {
+            "Premium" -> 20000.0
+            "Intermedio" -> 15000.0
+            "Básico" -> 10000.0
+            else -> 0.0
         }
     }
 }
